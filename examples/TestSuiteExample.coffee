@@ -1,10 +1,26 @@
 class TestSuiteExample
-
+	
   name: "TestSuiteExample"
 
   suiteSetup: ()->
 
   setup: ->
+
+  testAsync: (test, done) ->
+    myAsyncFunction done((value) ->
+      test.isNotNull value
+    )
+
+  testIsValid: (test) ->
+    test.isTrue true
+
+  clientTestIsClient: (test) ->
+    test.isTrue Meteor.isClient
+    test.isFalse Meteor.isServer
+
+  serverTestIsServer: (test) ->
+    test.isTrue Meteor.isServer
+    test.isFalse Meteor.isClient
 
   tests: [
     {
