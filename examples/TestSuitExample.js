@@ -2,9 +2,31 @@ TestSuiteExample = {
 
   name: "TestSuiteExample",
 
-  suiteSetup: function () {  },
+  suiteSetup: function () {
+  },
 
-  setup: function () {  },
+  setup: function () {
+  },
+
+  testAsync: function (test,done) {
+    myAsyncFunction(done(function (value) {
+      test.isNotNull(value);
+    }));
+  },
+
+  testIsValid: function (test) {
+    test.isTrue(true);
+  },
+
+  clientTestIsClient: function (test) {
+    test.isTrue(Meteor.isClient);
+    test.isFalse(Meteor.isServer);
+  },
+
+  serverTestIsServer: function(test){
+    test.isTrue(Meteor.isServer);
+    test.isFalse(Meteor.isClient);
+  },
 
   tests: [
     {
@@ -16,8 +38,8 @@ TestSuiteExample = {
     {
       name: "async test",
       skip: true,
-      func: function (test, onComplete) {
-        myAsyncFunction(onComplete(function (value) {
+      func: function (test, done) {
+        myAsyncFunction(done(function (value) {
           test.isNotNull(value);
         }));
       }
@@ -26,15 +48,17 @@ TestSuiteExample = {
       name: "three",
       type: "client",
       timeout: 5000,
-      func: function (test,onComplete) {
+      func: function (test) {
         test.isTrue(Meteor.isClient);
       }
     }
   ],
 
-  tearDown: function () {},
+  tearDown: function () {
+  },
 
-  suiteTearDown: function () {}
+  suiteTearDown: function () {
+  }
 
 }
 
