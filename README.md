@@ -17,6 +17,10 @@ Creating tests
 * `suiteTearDown`: run after the last test
 * `tearDown`: runs after each test
 * `tests`: an array of tests cases
+* `test<Name>` any function prefixed with `test` will run as a test case
+* `clientTest<Name>` same as above will only run on client
+* `serverTest<Name>` same as above will only run on server
+
 
 The tests cases can have this properties:
 
@@ -29,14 +33,36 @@ The tests cases can have this properties:
 
 Example Test Suite
 ---------------------------
-
+	
 	TestSuiteExample = {
 	
 	  name: "TestSuiteExample",
 	
-	  suiteSetup: function () {  },
+	  suiteSetup: function () {
+	  },
 	
-	  setup: function () {  },
+	  setup: function () {
+	  },
+	
+	  testAsync: function (test,done) {
+	    myAsyncFunction(done(function (value) {
+	      test.isNotNull(value);
+	    }));
+	  },
+	
+	  testIsValid: function (test) {
+	    test.isTrue(true);
+	  },
+	
+	  clientTestIsClient: function (test) {
+	    test.isTrue(Meteor.isClient);
+	    test.isFalse(Meteor.isServer);
+	  },
+	
+	  serverTestIsServer: function(test){
+	    test.isTrue(Meteor.isServer);
+	    test.isFalse(Meteor.isClient);
+	  },
 	
 	  tests: [
 	    {
@@ -48,8 +74,8 @@ Example Test Suite
 	    {
 	      name: "async test",
 	      skip: true,
-	      func: function (test, onComplete) {
-	        myAsyncFunction(onComplete(function (value) {
+	      func: function (test, done) {
+	        myAsyncFunction(done(function (value) {
 	          test.isNotNull(value);
 	        }));
 	      }
@@ -58,15 +84,17 @@ Example Test Suite
 	      name: "three",
 	      type: "client",
 	      timeout: 5000,
-	      func: function (test,onComplete) {
+	      func: function (test) {
 	        test.isTrue(Meteor.isClient);
 	      }
 	    }
 	  ],
 	
-	  tearDown: function () {},
+	  tearDown: function () {
+	  },
 	
-	  suiteTearDown: function () {}
+	  suiteTearDown: function () {
+	  }
 	
 	}
 	
@@ -78,42 +106,58 @@ Create a test suite is very simple with [CoffeeScript](coffeescript.org):
 
 
 	class TestSuiteExample
-
-      name: "TestSuiteExample"
-
-      suiteSetup: ()->
-
-      setup: ->
-
-      tests: [
-        {
-          name: "sync test"
-          func: (test)->
-
-        },
-        {
-          name: "async test"
-          skip: true
-          func: (test, done)->
-            myAsyncFunction done((value)->
-              test.isNotNull(value)
-            )
-
-        },
-        {
-          name: "three"
-          type: "client"
-          timeout: 5000
-          func: (test)->
-            test.isTrue Meteor.isClient
-        }
-      ]
-
-      tearDown: ->
-
-      suiteTearDown: ->
-
-    TestRunner.run(new TestSuiteExample())
+	
+	  name: "TestSuiteExample"
+	
+	  suiteSetup: ()->
+	
+	  setup: ->
+	
+	  testAsync: (test, done) ->
+	    myAsyncFunction done((value) ->
+	      test.isNotNull value
+	    )
+	
+	  testIsValid: (test) ->
+	    test.isTrue true
+	
+	  clientTestIsClient: (test) ->
+	    test.isTrue Meteor.isClient
+	    test.isFalse Meteor.isServer
+	
+	  serverTestIsServer: (test) ->
+	    test.isTrue Meteor.isServer
+	    test.isFalse Meteor.isClient
+	
+	  tests: [
+	    {
+	      name: "sync test"
+	      func: (test)->
+	
+	    },
+	    {
+	      name: "async test"
+	      skip: true
+	      func: (test, done)->
+	        myAsyncFunction done((value)->
+	          test.isNotNull(value)
+	        )
+	
+	    },
+	    {
+	      name: "three"
+	      type: "client"
+	      timeout: 5000
+	      func: (test)->
+	        test.isTrue Meteor.isClient
+	    }
+	  ]
+	
+	  tearDown: ->
+	
+	  suiteTearDown: ->
+	
+	TestRunner.run(new TestSuiteExample())
 
 
 
