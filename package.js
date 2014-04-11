@@ -3,7 +3,7 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-    api.use(["coffeescript","tinytest","test-helpers","chai","underscore"]);
+    api.use(["coffeescript","tinytest","test-helpers","chai","sinon","underscore"]);
     api.export(['lvTestAsyncMulti']);
     api.export(['TestRunner']);
     api.add_files("async_multi.js");
