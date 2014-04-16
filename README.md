@@ -1,7 +1,7 @@
 MUnit
 ========================
 
-**MUnit** stands for meteor unit (tests). It is a wrapper around Tinytest, the package testing framework shipped with meteor that adds some functionality that is standard in other testing frameworks, such as setup, tearDown, suiteSetup, etc. 
+**MUnit** stands for meteor unit (tests). It is a wrapper around Tinytest, the package testing framework shipped with meteor. **MUnit** adds support for test suites and some additional functionality that is standard in other testing frameworks, such as test timeouts, setup, tearDown, suiteSetup, and suiteTearDown.
 
 For additional information regarding Tinytest, please refer to this excellent screencast from the guys at EventedMind: [Testing Packages with Tinytest](https://www.eventedmind.com/feed/meteor-testing-packages-with-tinytest
 )
