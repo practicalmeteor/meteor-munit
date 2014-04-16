@@ -238,3 +238,8 @@ Contributions are more than welcome. Just create pull requests. Some of the thin
 
 * A file loader that automatically calls TestRunner.run()
 * A script that converts a meteor app into a meteor package, automatically creating the package.js file according to the meteor gathering order.
+
+
+License
+--------
+MIT
