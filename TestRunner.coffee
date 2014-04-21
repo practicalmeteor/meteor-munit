@@ -1,7 +1,7 @@
-class _TestRunner
+class spacejam.munit
 
 
-  run:(testSuite)->
+  @run:(testSuite)->
     chai.expect(testSuite).to.be.an('object')
 
     suiteName = testSuite.name || testSuite.constructor.name
@@ -18,9 +18,7 @@ class _TestRunner
     lastTest = arrSuiteTests.pop()# get last element of an array
 
     addFirstTest = ->
-      timeout = firstTest.timeout || 5000
-      firstTest.func = (->) if firstTest.skip
-      lvTestAsyncMulti "#{suiteName} - #{firstTest.name}",timeout,[
+      lvTestAsyncMulti "#{suiteName} - #{firstTest.name}",firstTest.timeout,[
         suiteSetup
         testSetup
         firstTest.func
@@ -28,9 +26,7 @@ class _TestRunner
       ]
 
     addLastTest = ->
-      timeout = lastTest.timeout || 5000
-      lastTest.func = (->) if lastTest.skip
-      lvTestAsyncMulti "#{suiteName} - #{lastTest.name}",timeout,[
+      lvTestAsyncMulti "#{suiteName} - #{lastTest.name}",lastTest.timeout,[
         testSetup
         lastTest.func
         testTearDown
@@ -38,9 +34,7 @@ class _TestRunner
       ]
 
     if firstTest and not lastTest
-      timeout = firstTest.timeout || 5000
-      firstTest.func = (->) if firstTest.skip
-      lvTestAsyncMulti "#{suiteName} - #{firstTest.name}",timeout,[
+      lvTestAsyncMulti "#{suiteName} - #{firstTest.name}",firstTest.timeout,[
         suiteSetup
         testSetup
         firstTest.func
@@ -54,13 +48,11 @@ class _TestRunner
     else
       addFirstTest()
       for test in arrSuiteTests
-        timeout = test.timeout || 5000
-        if not test.skip
-          lvTestAsyncMulti "#{suiteName} - #{test.name}",timeout,[
-            testSetup
-            test.func
-            testTearDown
-          ]
+        lvTestAsyncMulti "#{suiteName} - #{test.name}",test.timeout,[
+          testSetup
+          test.func
+          testTearDown
+        ]
       addLastTest()
 
 
@@ -76,19 +68,21 @@ class _TestRunner
       for test in suiteTests
         chai.expect(test).to.have.property('name')
         chai.expect(test).to.have.property('func')
-        if test.type is "client"
-          if Meteor.isClient
+        if not test.skip
+          test.timeout = test.timeout || 5000
+          if test.type is "client"
+            if Meteor.isClient
+              arrTests.push test
+          else if test.type is "server"
+            if Meteor.isServer
+              arrTests.push test
+          else
             arrTests.push test
-        else if test.type is "server"
-          if Meteor.isServer
-            arrTests.push test
-        else
-          arrTests.push test
 
     for key,func of testSuite
       if key isnt "tests" and key.indexOf("test") is 0
         expect(func).to.be.a('function')
-        arrTests.push name:key,func:func
+        arrTests.push name:key,func:func,timeout:5000
 
       else if key.indexOf("clientTest") is 0
         if Meteor.isClient
@@ -103,6 +97,3 @@ class _TestRunner
           arrTests.push name:suiteTestName,func:func
 
     return arrTests
-
-
-@TestRunner = new _TestRunner()

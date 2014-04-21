@@ -1,0 +1,2 @@
+spacejam = spacejam || {}
+spacejam.munit = {}

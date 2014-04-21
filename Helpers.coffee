@@ -1,4 +1,4 @@
-class Stub
+class Stubs
 
   stubs = {}
 
@@ -16,9 +16,9 @@ class Stub
   @restore:(name)->
     stubs[name]?.restore()
 
-@TestRunner.Stub = Stub
+spacejam.munit.stubs = Stubs
 
-class Spy
+class Spies
 
   spies = {}
 
@@ -37,4 +37,4 @@ class Spy
   @restore:(name)->
     spies[name]?.restore()
 
-@TestRunner.Spy = Spy
+spacejam.munit.spies = Spies
