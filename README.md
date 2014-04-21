@@ -47,9 +47,20 @@ Writting Tests
 
 The `test` argument is the same test object passed to a test function by `Tinytest.add`, and has the following methods:
 
+* equal
+* notEqual
+* instanceOf
+* matches
 * isTrue
-* 
-*
+* isFalse
+* isNull
+* isNotNull
+* isUndefined
+* isNaN
+* include
+* length
+
+You can see the complete documentation [here](https://github.com/meteor/meteor/blob/devel/packages/tinytest/tinytest.js)
 
 In addition munit depends on:
 
