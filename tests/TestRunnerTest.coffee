@@ -13,7 +13,7 @@ class SyncSuiteSetupTest
 
 
 try
-  TestRunner.run(new SyncSuiteSetupTest())
+  spacejam.munit.run(new SyncSuiteSetupTest())
 catch err
   console.error(err.stack)
 
@@ -48,7 +48,7 @@ class AsyncSuiteSetupTest
     test.isFalse @isValid
 
 try
-  TestRunner.run(new AsyncSuiteSetupTest())
+  spacejam.munit.run(new AsyncSuiteSetupTest())
 catch err
   console.error(err.stack)
 
@@ -79,7 +79,7 @@ class SyncSuiteTearDownTest
 
 
 try
-  TestRunner.run(new SyncSuiteTearDownTest())
+  spacejam.munit.run(new SyncSuiteTearDownTest())
 catch err
   console.error(err.stack)
 
@@ -113,7 +113,7 @@ class AsyncSuiteTearDownTest
 
 
 try
-  TestRunner.run(new AsyncSuiteTearDownTest())
+  spacejam.munit.run(new AsyncSuiteTearDownTest())
 catch err
   console.error(err.stack)
 
@@ -154,7 +154,7 @@ class MultipleTestSyncSuiteTest
 
 
 try
-  TestRunner.run(new MultipleTestSyncSuiteTest())
+  spacejam.munit.run(new MultipleTestSyncSuiteTest())
 catch err
   console.error(err.stack)
 
@@ -199,7 +199,7 @@ class MultipleTestAsyncSuiteTest
       test.isTrue self.isValid
 
 try
-  TestRunner.run(new MultipleTestAsyncSuiteTest())
+  spacejam.munit.run(new MultipleTestAsyncSuiteTest())
 catch err
   console.error(err.stack)
 
@@ -228,7 +228,7 @@ class ClientServerSyncSuiteTest
 
 
 try
-  TestRunner.run(new ClientServerSyncSuiteTest())
+  spacejam.munit.run(new ClientServerSyncSuiteTest())
 catch err
   console.error(err.stack)
 
@@ -262,7 +262,7 @@ class ClientServerAsyncSuiteTest
 
 
 try
-  TestRunner.run(new ClientServerAsyncSuiteTest())
+  spacejam.munit.run(new ClientServerAsyncSuiteTest())
 catch err
   console.error(err.stack)
 
@@ -349,7 +349,7 @@ class CompleteSuiteTest
 
 
 try
-  TestRunner.run(new CompleteSuiteTest())
+  spacejam.munit.run(new CompleteSuiteTest())
 catch err
   console.error(err.stack)
 
@@ -384,6 +384,6 @@ class SkipSuiteTest
 
 
 try
-  TestRunner.run(new SkipSuiteTest())
+  spacejam.munit.run(new SkipSuiteTest())
 catch err
   console.error(err.stack)

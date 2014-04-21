@@ -5,7 +5,7 @@ Package.describe({
 Package.on_use(function (api, where) {
     api.use(["coffeescript","tinytest","test-helpers","chai","sinon","underscore"]);
     api.export(['lvTestAsyncMulti']);
-    api.export(['TestRunner']);
+    api.export(['spacejam']);
     api.add_files("namespaces.js");
     api.add_files("async_multi.js");
     api.add_files("TestRunner.coffee");
@@ -14,6 +14,5 @@ Package.on_use(function (api, where) {
 
 Package.on_test(function(api) {
     api.use(["coffeescript","tinytest","test-helpers","chai","munit"]);
-//    api.add_files("tests/TestSuiteTest.coffee")
     api.add_files("tests/TestRunnerTest.coffee")
 });

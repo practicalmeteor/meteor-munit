@@ -24,7 +24,7 @@ With **MUnit**, you organize your tests into test suite objects (or CoffeeScript
 * `clientTest<Name>` same as above, but will only run in the browser
 * `serverTest<Name>` same as above, but will only run on the server
 
-The test cases in the array of tests, can have the following properties:
+The test cases in the array of `tests`, can have the following properties:
 
 * `name`: the name of the test case (**required**)
 * `func`: the test case function (**required**)
