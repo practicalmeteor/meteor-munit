@@ -88,12 +88,12 @@ class spacejam.munit
         if Meteor.isClient
           expect(func).to.be.a('function')
           suiteTestName = key.replace("client","")
-          arrTests.push name:suiteTestName,func:func
+          arrTests.push name:suiteTestName,func:func,timeout:5000
 
       else if key.indexOf("serverTest") is 0
         if Meteor.isServer
           expect(func).to.be.a('function')
           suiteTestName = key.replace("server","")
-          arrTests.push name:suiteTestName,func:func
+          arrTests.push name:suiteTestName,func:func,timeout:5000
 
     return arrTests

@@ -66,9 +66,10 @@ In addition munit depends on:
 
 1. The excellent [chai](chaijs.com) BDD / TDD assertion library that we wrapped for meteor meteor-chai, so you can use all it's goodies exported into:
 
-expect
-assert
-should()
+ * expect
+ * assert
+ * should
+ 
 
 2. The excellent [Sinon.JS](sinonjs.org) test spies, stubs and mocks JavaScript library, wrapped for meteor: 
 
@@ -149,7 +150,7 @@ JavaScript Example
 	
 	}
 	
-	TestRunner.run(TestSuiteExample);
+	spacejam.munit.run(TestSuiteExample);
 
 
 
@@ -208,12 +209,12 @@ JavaScript Example
 	
 	  suiteTearDown: ->
 	
-	TestRunner.run(new TestSuiteExample())
+	spacejam.munit.run(new TestSuiteExample())
 
 
 
 Running your package tests in the browser with hot code reloads
------------------------
+----------------
 Assuming you develop your package as part of a meteor app and the package is located
 in the packages folder, from the meteor app root, run:
 
@@ -240,14 +241,14 @@ For our convenience, we created a couple of shell scripts that use environment v
 
 
 Internals
---
-The **MUnit** test runner uses a modified version of the `testAsyncMulti` function from the  test-helpers package shipped with meteor to run all the tests in the test suite including all the setup and tearDown functions, and therefore you will see the setup and tearDown functions as separate test cases in the test output.
+----------------
+The **MUnit** test runner uses a modified version of the `testAsyncMulti` function from the  test-helpers package shipped with meteor to run all the tests in the test suite including all the setup and `tearDown` functions, and therefore you will see the `setup` and `tearDown` functions as separate test cases in the test output.
 
 Contributions
-----------------------------
+----------------
 Contributions are more than welcome. Just create pull requests. Some of the things we think may be valuable are:
 
-* A file loader that automatically calls TestRunner.run()
+* A file loader that automatically calls `spacejam.io.munit.run( testSuiteObject );` 
 * A script that converts a meteor app into a meteor package, automatically creating the package.js file according to the meteor gathering order.
 
 

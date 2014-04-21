@@ -50,4 +50,4 @@ class TestSuiteExample
 
   suiteTearDown: ->
 
-TestRunner.run(new TestSuiteExample())
+spacejam.munit.run(new TestSuiteExample())
