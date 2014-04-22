@@ -34,7 +34,7 @@ The test cases in the array of `tests`, can have the following properties:
 
 To run your test suite tests, just: 
 
-`spacejam.io.munit.run( yourTestSuiteObject );` 
+`Munit.run( yourTestSuiteObject );` 
 
 
 Writting Tests
@@ -256,7 +256,7 @@ Contributions
 ----------------
 Contributions are more than welcome. Just create pull requests. Some of the things we think may be valuable are:
 
-* A file loader that automatically calls `spacejam.io.munit.run( testSuiteObject );` 
+* A file loader that automatically calls `Munit.run( testSuiteObject );` 
 * A script that converts a meteor app into a meteor package, automatically creating the package.js file according to the meteor gathering order.
 
 
