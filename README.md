@@ -75,13 +75,21 @@ In addition munit depends on:
 
 Writting Async Tests
 ==
-	mySuite = {
-		testExample:function(test,done){
-			test.isTrue(true)
-		}
-	}
+    myAsyncFunction = function(callback){
+       setTimeout(function(){
+         callback(true)
+       },1000)
+    }
+    
+    mySuite = {
+      testExample: function (test, done) {
+        myAsyncFunction(done(function (value) {
+          test.isNotNull(value);
+        }));
+      }
+    }
 
-The done argument is the onComplete function passed to a test function by `Tinytest.addAsync`.
+The `done` argument is the `onComplete` function passed to a test function by `Tinytest.addAsync`.
 
 JavaScript Example
 ========================
