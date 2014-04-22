@@ -1,4 +1,4 @@
-class spacejam.munit
+class Munit
 
 
   @run:(testSuite)->

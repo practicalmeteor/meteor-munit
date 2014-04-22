@@ -1,2 +1,1 @@
-spacejam = spacejam || {}
-spacejam.munit = {}
+Munit = {}

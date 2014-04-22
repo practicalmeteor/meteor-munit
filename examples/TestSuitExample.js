@@ -62,4 +62,4 @@ TestSuiteExample = {
 
 }
 
-spacejam.munit.run(TestSuiteExample);
+Munit.run(TestSuiteExample);

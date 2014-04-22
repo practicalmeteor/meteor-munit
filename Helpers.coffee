@@ -21,7 +21,7 @@ class Spies
   @restore:(name)->
     spies[name]?.restore()
 
-spacejam.munit.spies = Spies
+Munit.spies = Spies
 
 
 
@@ -45,4 +45,4 @@ class Stubs
   @restore:(name)->
     stubs[name]?.restore()
 
-spacejam.munit.stubs = Stubs
+Munit.stubs = Stubs

@@ -1,7 +1,7 @@
-MUnit
+Munit
 ========================
 
-**MUnit** stands for meteor unit (tests). It is a wrapper around Tinytest, the package testing framework shipped with meteor. **MUnit** adds support for test suites and some additional functionality that is standard in other testing frameworks, such as test timeouts, setup, tearDown, suiteSetup, and suiteTearDown.
+**Munit** stands for meteor unit (tests). It is a wrapper around Tinytest, the package testing framework shipped with meteor. **Munit** adds support for test suites and some additional functionality that is standard in other testing frameworks, such as test timeouts, setup, tearDown, suiteSetup, and suiteTearDown.
 
 For additional information regarding Tinytest, please refer to this excellent screencast from the guys at EventedMind: [Testing Packages with Tinytest](https://www.eventedmind.com/feed/meteor-testing-packages-with-tinytest
 )
@@ -12,7 +12,7 @@ Installation
 
 Creating Test Suites
 ========================
-With **MUnit**, you organize your tests into test suite objects (or CoffeeScript classes). Each test suite can have the following methods and properties.
+With **Munit**, you organize your tests into test suite objects (or CoffeeScript classes). Each test suite can have the following methods and properties.
 
 * `name`: the test suite name, with support for dashes for sub-grouping, as in Tinytest
 * `suiteSetup`: runs once before all tests
@@ -150,7 +150,7 @@ JavaScript Example
 	
 	}
 	
-	spacejam.munit.run(TestSuiteExample);
+	Munit.run(TestSuiteExample);
 
 
 
@@ -209,7 +209,7 @@ JavaScript Example
 	
 	  suiteTearDown: ->
 	
-	spacejam.munit.run(new TestSuiteExample())
+	Munit.run(new TestSuiteExample())
 
 
 
@@ -242,7 +242,7 @@ For our convenience, we created a couple of shell scripts that use environment v
 
 Internals
 ----------------
-The **MUnit** test runner uses a modified version of the `testAsyncMulti` function from the  test-helpers package shipped with meteor to run all the tests in the test suite including all the setup and `tearDown` functions, and therefore you will see the `setup` and `tearDown` functions as separate test cases in the test output.
+The **Munit** test runner uses a modified version of the `testAsyncMulti` function from the  test-helpers package shipped with meteor to run all the tests in the test suite including all the setup and `tearDown` functions, and therefore you will see the `setup` and `tearDown` functions as separate test cases in the test output.
 
 Contributions
 ----------------

@@ -13,7 +13,7 @@ class SyncSuiteSetupTest
 
 
 try
-  spacejam.munit.run(new SyncSuiteSetupTest())
+  Munit.run(new SyncSuiteSetupTest())
 catch err
   console.error(err.stack)
 
@@ -48,7 +48,7 @@ class AsyncSuiteSetupTest
     test.isFalse @isValid
 
 try
-  spacejam.munit.run(new AsyncSuiteSetupTest())
+  Munit.run(new AsyncSuiteSetupTest())
 catch err
   console.error(err.stack)
 
@@ -79,7 +79,7 @@ class SyncSuiteTearDownTest
 
 
 try
-  spacejam.munit.run(new SyncSuiteTearDownTest())
+  Munit.run(new SyncSuiteTearDownTest())
 catch err
   console.error(err.stack)
 
@@ -113,7 +113,7 @@ class AsyncSuiteTearDownTest
 
 
 try
-  spacejam.munit.run(new AsyncSuiteTearDownTest())
+  Munit.run(new AsyncSuiteTearDownTest())
 catch err
   console.error(err.stack)
 
@@ -154,7 +154,7 @@ class MultipleTestSyncSuiteTest
 
 
 try
-  spacejam.munit.run(new MultipleTestSyncSuiteTest())
+  Munit.run(new MultipleTestSyncSuiteTest())
 catch err
   console.error(err.stack)
 
@@ -199,7 +199,7 @@ class MultipleTestAsyncSuiteTest
       test.isTrue self.isValid
 
 try
-  spacejam.munit.run(new MultipleTestAsyncSuiteTest())
+  Munit.run(new MultipleTestAsyncSuiteTest())
 catch err
   console.error(err.stack)
 
@@ -228,7 +228,7 @@ class ClientServerSyncSuiteTest
 
 
 try
-  spacejam.munit.run(new ClientServerSyncSuiteTest())
+  Munit.run(new ClientServerSyncSuiteTest())
 catch err
   console.error(err.stack)
 
@@ -262,7 +262,7 @@ class ClientServerAsyncSuiteTest
 
 
 try
-  spacejam.munit.run(new ClientServerAsyncSuiteTest())
+  Munit.run(new ClientServerAsyncSuiteTest())
 catch err
   console.error(err.stack)
 
@@ -276,11 +276,11 @@ class CompleteSuiteTest
     self = @
 
   suiteSetup:(test)->
-    console.warn "suiteSetup: "+count++
+    console.log "suiteSetup: "+count++
     self.isValid = true
 
   suiteTearDown:(test)->
-    console.warn "suiteTearDown: "+count++
+    console.log "suiteTearDown: "+count++
     self.isValid = false
 
 #  setup:(test)->
@@ -291,7 +291,7 @@ class CompleteSuiteTest
     {
       name:"tests - Sync CompleteSuiteTest"
       func:(test)->
-        console.warn "tests - Sync CompleteSuiteTest: "+count++
+        console.log "tests - Sync CompleteSuiteTest: "+count++
         test.isTrue self.isValid
         self.isValid = false
     },
@@ -299,7 +299,7 @@ class CompleteSuiteTest
       name:"tests - Async CompleteSuiteTestTwo"
       func:(test,onComplete)->
         withLatency 200,onComplete ->
-          console.warn "tests - Async CompleteSuiteTest: "+count++
+          console.log "tests - Async CompleteSuiteTest: "+count++
           test.isFalse self.isValid
           if Meteor.isServer
             self.isValid = true
@@ -311,7 +311,7 @@ class CompleteSuiteTest
       name:"tests - Client CompleteSuiteTest"
       type:"client"
       func:(test)->
-        console.warn "tests - Client CompleteSuiteTest: "+count++
+        console.log "tests - Client CompleteSuiteTest: "+count++
         test.isFalse self.isValid
         self.isValid = true
     },
@@ -319,19 +319,19 @@ class CompleteSuiteTest
       name:"tests - Server CompleteSuiteTest"
       type:"server"
       func:(test)->
-        console.warn "tests - Server CompleteSuiteTest: "+count++
+        console.log "tests - Server CompleteSuiteTest: "+count++
         test.isTrue self.isValid
     }
 
   ]
 
   testValidIsTrue:(test)->
-    console.warn "testValidIsTrue: "+count++
+    console.log "testValidIsTrue: "+count++
     test.isTrue self.isValid
     self.isValid = false
 
   testValidIsFalse:(test)->
-    console.warn "testValidIsFalse: "+count++
+    console.log "testValidIsFalse: "+count++
     test.isFalse self.isValid
     if Meteor.isServer
       self.isValid = false
@@ -340,16 +340,16 @@ class CompleteSuiteTest
 
 
   clientTestValidIsTrueOnlyClient:(test)->
-    console.warn "clientValidIsTrueOnlyClient: "+count++
+    console.log "clientValidIsTrueOnlyClient: "+count++
     test.isTrue self.isValid
 
   serverTestValidIsFalseOnlyServer:(test)->
-    console.warn "clientValidIsFalseOnlyServer: "+count++
+    console.log "clientValidIsFalseOnlyServer: "+count++
     test.isFalse self.isValid
 
 
 try
-  spacejam.munit.run(new CompleteSuiteTest())
+  Munit.run(new CompleteSuiteTest())
 catch err
   console.error(err.stack)
 
@@ -384,6 +384,6 @@ class SkipSuiteTest
 
 
 try
-  spacejam.munit.run(new SkipSuiteTest())
+  Munit.run(new SkipSuiteTest())
 catch err
   console.error(err.stack)
