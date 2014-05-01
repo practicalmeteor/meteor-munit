@@ -47,20 +47,25 @@ Writting Tests
 
 The `test` argument is the same test object passed to a test function by `Tinytest.add`, and has the following methods:
 
-* equal
-* notEqual
-* instanceOf
-* matches
-* isTrue
-* isFalse
-* isNull
-* isNotNull
-* isUndefined
-* isNaN
-* include
-* length
+* `equal(actual, expected, msg)`
+* `notEqual(actual, expected, msg)`
+* `instanceOf(obj, klass)`
+* `matches(actual, regexp, msg)`
+* `throws(func, expected)`
+* `isTrue(value, msg)`
+* `isFalse(value, msg)`
+* `isNull(value, msg)`
+* `isNotNull(value, msg)`
+* `isUndefined(value, msg)`
+* `isNaN(value, msg)`
+* `include(object, key)`
+* `include(string, substring)`
+* `include(array, value)`
+* `length(obj, expected_length, msg)`
 
-You can see the complete documentation [here](https://github.com/meteor/meteor/blob/devel/packages/tinytest/tinytest.js)
+The `msg` property is an custom error message for the assertion.
+
+You can see the source code [here](https://github.com/meteor/meteor/blob/devel/packages/tinytest/tinytest.js)
 
 In addition munit depends on:
 
@@ -110,7 +115,7 @@ JavaScript Example
 	    }));
 	  },
 	
-	  testIsValid: function (test) {
+	  testIsTrue: function (test) {
 	    test.isTrue(true);
 	  },
 	
@@ -141,7 +146,7 @@ JavaScript Example
 	      }
 	    },
 	    {
-	      name: "three",
+	      name: "test with timeout",
 	      type: "client",
 	      timeout: 5000,
 	      func: function (test) {
@@ -178,7 +183,7 @@ JavaScript Example
 	      test.isNotNull value
 	    )
 	
-	  testIsValid: (test) ->
+	  testIsTrue: (test) ->
 	    test.isTrue true
 	
 	  clientTestIsClient: (test) ->
@@ -205,7 +210,7 @@ JavaScript Example
 	
 	    },
 	    {
-	      name: "three"
+	      name: "test with timeout"
 	      type: "client"
 	      timeout: 5000
 	      func: (test)->
@@ -250,7 +255,7 @@ For our convenience, we created a couple of shell scripts that use environment v
 
 Internals
 ----------------
-The **Munit** test runner uses a modified version of the `testAsyncMulti` function from the  test-helpers package shipped with meteor to run all the tests in the test suite including all the setup and `tearDown` functions, and therefore you will see the `setup` and `tearDown` functions as separate test cases in the test output.
+The **Munit** test runner uses a slightly modified version of the `testAsyncMulti` function (with support for test timeouts) from the  test-helpers package shipped with meteor to run all the tests in the test suite including all the setup and `tearDown` functions, and therefore you will see the `setup` and `tearDown` functions as separate test cases in the test output.
 
 Contributions
 ----------------
