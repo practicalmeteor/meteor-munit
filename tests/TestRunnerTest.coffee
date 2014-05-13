@@ -159,49 +159,49 @@ catch err
   console.error(err.stack)
 
 
+
+
+
+
 class MultipleTestAsyncSuiteTest
 
   self = null
 
-  isValid:true
+  value: null
+
+  name: "MultipleTestAsyncSuiteTest - verify multiple calls to testAsyncMulti are run serially"
+
+  changeTestValue: (value)->
+    @value = value
+    console.log("value=",value)
 
   constructor:->
     self = @
 
-  suiteSetup:(test,onComplete)->
-    console.log("MultipleTestAsyncSuiteTest.suiteSetup")
-    self.changeIsValidValue onComplete =>
-      test.isFalse self.isValid
+  suiteSetup:(test)->
+    console.log("MultipleTestSyncSuiteTest.suiteSetup")
+    self.changeTestValue("suiteSetup")
+    test.equal self.value,"suiteSetup"
 
 
   testOne: (test,onComplete)->
     console.log("MultipleTestAsyncSuiteTest.testOne")
-    self.changeIsValidValue onComplete =>
-      test.isTrue self.isValid
+    test.equal self.value,"suiteSetup"
+    withLatency 100, onComplete ->
+      test.equal self.value,"suiteSetup"
+      self.changeTestValue("testOne")
+
 
   testTwo: (test,onComplete)->
     console.log("MultipleTestAsyncSuiteTest.testTwo")
-    self.changeIsValidValue onComplete =>
-      test.isFalse self.isValid
+    test.equal self.value,"testOne"
 
-  changeIsValidValue:(cb)=>
-    withLatency( 1000,->
-      if self.isValid
-        self.isValid = false
-      else
-        self.isValid = true
-      cb()
-    )
-
-  suiteTearDown:(test,onComplete)->
-    console.log("MultipleTestAsyncSuiteTest.suiteTearDown")
-    self.changeIsValidValue onComplete =>
-      test.isTrue self.isValid
 
 try
   Munit.run(new MultipleTestAsyncSuiteTest())
 catch err
   console.error(err.stack)
+
 
 
 
