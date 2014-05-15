@@ -6,7 +6,7 @@
   "version": "0.1.5",
   "git": "https://github.com/spacejamio/meteor-munit.git",
   "packages": {
-    "chai": "0.1.5,
-    "sinon": "0.1.5
+    "chai": "0.1.5",
+    "sinon": "0.1.5"
   }
 }
