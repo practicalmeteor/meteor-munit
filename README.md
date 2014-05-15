@@ -225,6 +225,11 @@ JavaScript Example
 	Munit.run(new TestSuiteExample())
 
 
+Sample Meteor App
+-------
+Provided thanks to Michael Risse:
+
+https://github.com/rissem/meteor-munit-example/
 
 Running your package tests in the browser with hot code reloads
 ----------------
