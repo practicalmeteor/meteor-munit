@@ -231,7 +231,7 @@ Provided thanks to Michael Risse:
 
 https://github.com/rissem/meteor-munit-example/
 
-See the lib package unit tests here:
+See the lib package munit tests here, including how to add your tests to your package.js:
 
 https://github.com/rissem/meteor-munit-example/tree/master/packages/lib
 
