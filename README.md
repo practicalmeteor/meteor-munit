@@ -231,6 +231,10 @@ Provided thanks to Michael Risse:
 
 https://github.com/rissem/meteor-munit-example/
 
+See the lib package unit tests here:
+
+https://github.com/rissem/meteor-munit-example/tree/master/packages/lib
+
 Running your package tests in the browser with hot code reloads
 ----------------
 Assuming you develop your package as part of a meteor app and the package is located
