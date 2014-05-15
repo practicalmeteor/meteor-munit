@@ -3,7 +3,7 @@
   "description": "Unit test suites for packages",
   "homepage": "https://github.com/spacejamio/meteor-munit",
   "author": "SpaceJam.io (LaVaina Inc.)",
-  "version": "0.1.5,
+  "version": "0.1.5",
   "git": "https://github.com/spacejamio/meteor-munit.git",
   "packages": {
     "chai": "0.1.5,
