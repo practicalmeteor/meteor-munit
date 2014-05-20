@@ -20,6 +20,7 @@ class Spies
 
   @restore:(name)->
     spies[name]?.restore()
+    delete spies[name]
 
 Munit.spies = Spies
 
@@ -44,5 +45,6 @@ class Stubs
 
   @restore:(name)->
     stubs[name]?.restore()
+    delete stubs[name]
 
 Munit.stubs = Stubs
