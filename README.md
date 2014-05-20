@@ -63,20 +63,20 @@ The `test` argument is the same test object passed to a test function by `Tinyte
 * `include(array, value)`
 * `length(obj, expected_length, msg)`
 
-The `msg` property is an custom error message for the assertion.
+The `msg` property is a custom error message for the assertion.
 
-You can see the source code [here](https://github.com/meteor/meteor/blob/devel/packages/tinytest/tinytest.js)
+You can see the source code [here](https://github.com/meteor/meteor/blob/devel/packages/tinytest/tinytest.js).
 
 In addition munit depends on:
 
-1. The excellent [chai](chaijs.com) BDD / TDD assertion library that we wrapped for meteor meteor-chai, so you can use all it's goodies exported into:
+1. The excellent [chai](https://atmospherejs.com/package/chai) BDD / TDD assertion library that we wrapped for meteor, so you can use all it's goodies exported into:
 
  * expect
  * assert
  * should
  
 
-2. The excellent [Sinon.JS](sinonjs.org) test spies, stubs and mocks JavaScript library, wrapped for meteor: 
+2. The excellent [sinon](https://atmospherejs.com/package/sinon) test spies, stubs and mocks JavaScript library, wrapped for meteor: 
 
 Writting Async Tests
 ==
@@ -225,6 +225,15 @@ JavaScript Example
 	Munit.run(new TestSuiteExample())
 
 
+Sample Meteor App
+-------
+Provided thanks to Michael Risse:
+
+https://github.com/rissem/meteor-munit-example/
+
+See the lib package munit tests here, including how to add your tests to your package.js:
+
+https://github.com/rissem/meteor-munit-example/tree/master/packages/lib
 
 Running your package tests in the browser with hot code reloads
 ----------------
