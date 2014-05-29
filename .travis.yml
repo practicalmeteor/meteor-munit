@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+  - "0.10"
+before_install:
+  - "curl https://install.meteor.com | /bin/sh"
+  - "npm install -g meteorite"
+  - "npm install -g coffee-script"
+  - "npm install -g spacejam"
+  - "mrt update"
+  - "cd ../"
+  - "mv meteor-munit munit"
+  - "cd munit"
+  - "export PACKAGE_DIRS=`pwd`/packages"
+branches:
+  only:
+    - master
+    - devel
