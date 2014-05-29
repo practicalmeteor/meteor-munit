@@ -7,10 +7,8 @@ before_install:
   - "npm install -g coffee-script"
   - "npm install -g spacejam"
   - "mrt update"
-  - "cd ../"
-  - "mv meteor-munit munit"
-  - "cd munit"
   - "export PACKAGE_DIRS=`pwd`/packages"
+script: "spacejam test-packages ./"
 branches:
   only:
     - master
