@@ -64,6 +64,16 @@ class Munit
     arrTests = []
     suiteTests = testSuite['tests']
     if suiteTests
+
+      # Convert an object declaration into the standard array format.
+      if not _.isArray(suiteTests) and _.isObject(suiteTests)
+        suiteTests = []
+        for key, test of testSuite['tests']
+          test = { func:test } if _.isFunction(test)
+          test.name ?= _.humanize(key)
+          suiteTests.push(test)
+        testSuite['tests'] = suiteTests
+
       chai.expect(suiteTests).to.be.an('array')
       for test in suiteTests
         chai.expect(test).to.have.property('name')
