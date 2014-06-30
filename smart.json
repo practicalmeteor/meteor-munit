@@ -7,6 +7,7 @@
   "git": "https://github.com/spacejamio/meteor-munit.git",
   "packages": {
     "chai": "0.1.5",
-    "sinon": "0.1.5"
+    "sinon": "0.1.5",
+    "underscore-string-latest": "2.3.3"
   }
 }
