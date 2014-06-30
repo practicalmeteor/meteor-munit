@@ -37,7 +37,7 @@ To run your test suite tests, just:
 `Munit.run( yourTestSuiteObject );`
 
 
-Writting Tests
+Writing Tests
 ========================
 	mySuite = {
 		testExample:function(test){
