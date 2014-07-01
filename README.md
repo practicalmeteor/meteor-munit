@@ -32,12 +32,12 @@ The test cases in the array of `tests`, can have the following properties:
 * `timeout`: test timeout, in milliseconds (**default 5000**)
 * `skip`: skip the test
 
-To run your test suite tests, just: 
+To run your test suite tests, just:
 
-`Munit.run( yourTestSuiteObject );` 
+`Munit.run( yourTestSuiteObject );`
 
 
-Writting Tests
+Writing Tests
 ========================
 	mySuite = {
 		testExample:function(test){
@@ -74,9 +74,9 @@ In addition munit depends on:
  * expect
  * assert
  * should
- 
 
-2. The excellent [sinon](https://atmospherejs.com/package/sinon) test spies, stubs and mocks JavaScript library, wrapped for meteor: 
+
+2. The excellent [sinon](https://atmospherejs.com/package/sinon) test spies, stubs and mocks JavaScript library, wrapped for meteor:
 
 Writting Async Tests
 ==
@@ -85,7 +85,7 @@ Writting Async Tests
          callback(true)
        },1000)
     }
-    
+
     mySuite = {
       testExample: function (test, done) {
         myAsyncFunction(done(function (value) {
@@ -100,35 +100,35 @@ JavaScript Example
 ========================
 
 	TestSuiteExample = {
-	
+
 	  name: "TestSuiteExample",
-	
+
 	  suiteSetup: function () {
 	  },
-	
+
 	  setup: function () {
 	  },
-	
+
 	  testAsync: function (test,done) {
 	    myAsyncFunction(done(function (value) {
 	      test.isNotNull(value);
 	    }));
 	  },
-	
+
 	  testIsTrue: function (test) {
 	    test.isTrue(true);
 	  },
-	
+
 	  clientTestIsClient: function (test) {
 	    test.isTrue(Meteor.isClient);
 	    test.isFalse(Meteor.isServer);
 	  },
-	
+
 	  serverTestIsServer: function(test){
 	    test.isTrue(Meteor.isServer);
 	    test.isFalse(Meteor.isClient);
 	  },
-	
+
 	  tests: [
 	    {
 	      name: "sync test",
@@ -154,15 +154,15 @@ JavaScript Example
 	      }
 	    }
 	  ],
-	
+
 	  tearDown: function () {
 	  },
-	
+
 	  suiteTearDown: function () {
 	  }
-	
+
 	}
-	
+
 	Munit.run(TestSuiteExample);
 
 
@@ -171,34 +171,34 @@ JavaScript Example
 
 
 	class TestSuiteExample
-	
+
 	  name: "TestSuiteExample"
-	
-	  suiteSetup: ()->
-	
+
+	  suiteSetup: ->
+
 	  setup: ->
-	
+
 	  testAsync: (test, done) ->
 	    myAsyncFunction done((value) ->
 	      test.isNotNull value
 	    )
-	
+
 	  testIsTrue: (test) ->
 	    test.isTrue true
-	
+
 	  clientTestIsClient: (test) ->
 	    test.isTrue Meteor.isClient
 	    test.isFalse Meteor.isServer
-	
+
 	  serverTestIsServer: (test) ->
 	    test.isTrue Meteor.isServer
 	    test.isFalse Meteor.isClient
-	
+
 	  tests: [
 	    {
 	      name: "sync test"
 	      func: (test)->
-	
+
 	    },
 	    {
 	      name: "async test"
@@ -207,7 +207,7 @@ JavaScript Example
 	        myAsyncFunction done((value)->
 	          test.isNotNull(value)
 	        )
-	
+
 	    },
 	    {
 	      name: "test with timeout"
@@ -217,12 +217,30 @@ JavaScript Example
 	        test.isTrue Meteor.isClient
 	    }
 	  ]
-	
+
 	  tearDown: ->
-	
+
 	  suiteTearDown: ->
-	
+
 	Munit.run(new TestSuiteExample())
+
+
+## Declaring tests as an object.
+Alternatively you can declare the `tests` as an object, for example:
+
+
+		class TestSuiteExample
+			name: "TestSuiteExample"
+
+			tests:
+			  myTest1: (test) -> # Name parsed to "My Test 1"
+
+			  myTest2:
+			    skip: true
+			    func: (test) -> # Name parsed to "My Test 2"
+
+
+
 
 
 Sample Meteor App
@@ -254,7 +272,7 @@ If you develop your package stand-alone, make sure meteor is in your path, and r
 
 Running your meteor app and your meteor package tests at the same time
 ----------------
-The way we work internally is to run our meteor app with a free [mongohq](http://www.mongohq.com/)  sandbox database and at the same time run all of our packages tests with the internal meteor mongodb on a different port: 
+The way we work internally is to run our meteor app with a free [mongohq](http://www.mongohq.com/)  sandbox database and at the same time run all of our packages tests with the internal meteor mongodb on a different port:
 
 * app: `MONGO_URL=... meteor`
 * tests: `meteor --port 3100 test-packages our-packages`
@@ -270,7 +288,7 @@ Contributions
 ----------------
 Contributions are more than welcome. Just create pull requests. Some of the things we think may be valuable are:
 
-* A file loader that automatically calls `Munit.run( testSuiteObject );` 
+* A file loader that automatically calls `Munit.run( testSuiteObject );`
 * A script that converts a meteor app into a meteor package, automatically creating the package.js file according to the meteor gathering order.
 
 

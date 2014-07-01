@@ -376,10 +376,7 @@ class SkipSuiteTest
       skip: true
       func:(test)->
         test.fail("This should pass")
-
     }
-
-
   ]
 
 
@@ -387,3 +384,28 @@ try
   Munit.run(new SkipSuiteTest())
 catch err
   console.error(err.stack)
+
+
+
+
+
+class TestsAsObjectSuiteTest
+  tests:
+    simpleTest: (test) -> test.equal(test.test_case.shortName, 'simpleTest')
+    'My Test': (test) -> test.equal(test.test_case.shortName, 'My Test')
+
+    foo:
+      name: 'My explicit name'
+      func: (test) -> test.equal(test.test_case.shortName, 'My explicit name')
+
+    skipTest:
+      skip: true
+      func:(test)->
+        test.fail("This should pass")
+
+try
+  Munit.run(new TestsAsObjectSuiteTest())
+catch err
+  console.error(err.stack)
+
+
