@@ -70,7 +70,7 @@ class Munit
         suiteTests = []
         for key, test of testSuite['tests']
           test = { func:test } if _.isFunction(test)
-          test.name ?= _.humanize(key)
+          test.name ?= key
           suiteTests.push(test)
         testSuite['tests'] = suiteTests
 

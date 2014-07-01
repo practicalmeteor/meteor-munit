@@ -13,6 +13,6 @@ Package.on_use(function (api, where) {
 });
 
 Package.on_test(function(api) {
-    api.use(["coffeescript","tinytest","test-helpers","chai","munit", "underscore-string-latest"]);
+    api.use(["coffeescript","tinytest","test-helpers","chai","munit"]);
     api.add_files("tests/TestRunnerTest.coffee")
 });

@@ -391,8 +391,8 @@ catch err
 
 class TestsAsObjectSuiteTest
   tests:
-    simpleTest: (test) -> test.equal(test.test_case.shortName, 'Simple test')
-    'my test': (test) -> test.equal(test.test_case.shortName, 'My test')
+    simpleTest: (test) -> test.equal(test.test_case.shortName, 'simpleTest')
+    'My Test': (test) -> test.equal(test.test_case.shortName, 'My Test')
 
     foo:
       name: 'My explicit name'
