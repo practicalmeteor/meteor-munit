@@ -1,4 +1,4 @@
-suite = null
+_suite = null
 
 
 
@@ -15,19 +15,22 @@ Defines a suite of tests.  For example:
 describe = (text, func) ->
   # Setup initial conditions.
   return unless _.isFunction(func)
-  suite =
-    name: text
-    tests: {}
+  if _suite?
+    # NOTE: Change this if it turns out we can test suites within suites.
+    throw new Error('Cannot nest "describe" statements')
 
   # Build the set of tests within the suite.
+  _suite = result =
+    name: text
+    tests: {}
   func()
+  _suite = null
 
   # Run the tests.
-  Munit.run(suite) if describe.autoRun is true
+  Munit.run(result) if describe.autoRun is true
 
   # Finish up.
-  suite
-  # suite = null
+  result
 
 
 
@@ -47,31 +50,31 @@ describe.autoRun = true
 ###
 Declares a single unit test.
 ###
-it = (text, func) -> suite?.tests[text] = func if _.isFunction(func)
+it = (text, func) -> _suite?.tests[text] = func if _.isFunction(func)
 
 
 ###
 Declares the suite setup that is run before all tests within the suite.
 ###
-beforeAll = (func) -> suite?.suiteSetup = func if _.isFunction(func)
+beforeAll = (func) -> _suite?.suiteSetup = func if _.isFunction(func)
 
 
 ###
 Declares the test setup that is run before each test.
 ###
-beforeEach = (func) -> suite?.setup = func if _.isFunction(func)
+beforeEach = (func) -> _suite?.setup = func if _.isFunction(func)
 
 
 ###
 Declares the test tear-down that is run after each unit test comlete.
 ###
-afterEach = (func) -> suite?.tearDown = func if _.isFunction(func)
+afterEach = (func) -> _suite?.tearDown = func if _.isFunction(func)
 
 
 ###
 Declares the suite tear-down that is run once after all tests are complete.
 ###
-afterAll = (func) -> suite?.suiteTearDown = func if _.isFunction(func)
+afterAll = (func) -> _suite?.suiteTearDown = func if _.isFunction(func)
 
 
 

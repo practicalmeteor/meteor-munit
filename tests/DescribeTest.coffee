@@ -31,6 +31,12 @@ describeSuiteTest =
                 afterAll(func)
       test.equal(suite.suiteTearDown, func)
 
+    'throws if nesting describes': (test) ->
+      func = ->
+        describe 'parent', ->
+          describe 'child', ->
+      test.throws func, 'Cannot nest "describe" statements'
+
 
 
 try
