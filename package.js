@@ -6,7 +6,7 @@ Package.on_use(function (api, where) {
     api.use(["coffeescript","tinytest","test-helpers","chai","sinon","underscore"]);
     api.export(['lvTestAsyncMulti']);
     api.export(['Munit']);
-    api.export('describe', 'it', 'beforeAll', 'beforeAll', 'afterEach', 'afterAll');
+    api.export(['describe', 'it', 'beforeAll', 'beforeAll', 'afterEach', 'afterAll']);
 
     api.add_files("namespaces.js");
     api.add_files("async_multi.js");
