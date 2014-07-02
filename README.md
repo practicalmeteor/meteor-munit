@@ -241,6 +241,38 @@ Alternatively you can declare the `tests` as an object, for example:
 
 
 
+## Delcaring tests with BDD semantics
+MUnit also allows you to use `describe` and `it` declaration blocks to declare tests:
+
+
+    describe 'My test suite', ->
+
+      beforeAll ->  # Runs once before all tests within the suite (suiteSetup.
+      beforeEach -> # Runs before each test (setup).
+
+      it 'does something', ->
+        expect(true).to.equal true
+
+      afterEach -> # Runs after each test (tearDown).
+      afterAll ->  # Runs after all tests (suiteTearDown)
+
+
+To run a test asynchronously include a `done` callback, and invoke it upon completion:
+
+    describe 'My test suite', ->
+      it 'does something asynchronously', (done) ->
+
+        onComplete = ->
+          expect(true).to.equal true
+          done()
+
+        Meteor.setTimeout (-> onComplete()), 1000
+
+
+**NOTE**: This callback behavior works the way Mocha handles callbacks within BDD style tests
+and differs from the way MUnit suites handle asynchronous tests.
+
+
 
 
 Sample Meteor App
