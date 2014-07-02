@@ -225,7 +225,7 @@ JavaScript Example
 	Munit.run(new TestSuiteExample())
 
 
-## Declaring tests as an object.
+## Declaring Tests as an Object.
 Alternatively you can declare the `tests` as an object, for example:
 
 
@@ -241,7 +241,7 @@ Alternatively you can declare the `tests` as an object, for example:
 
 
 
-## Delcaring tests with BDD semantics
+## Delcaring Tests with BDD Semantics
 MUnit also allows you to use `describe` and `it` declaration blocks to declare tests:
 
 
