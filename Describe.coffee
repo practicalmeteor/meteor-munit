@@ -1,12 +1,16 @@
 suite = null
 
 
+
+
 ###
 Defines a suite of tests.  For example:
 
   describe 'a suite of tests', ->
     it 'does something', ->
 
+@param text: The describe text for the suite.
+@param func: The test function to run.
 ###
 describe = (text, func) ->
   # Setup initial conditions.
@@ -19,15 +23,31 @@ describe = (text, func) ->
   func()
 
   # Run the tests.
-  Munit.run(suite)
-  suite = null
+  Munit.run(suite) if describe.autoRun is true
+
+  # Finish up.
+  suite
+  # suite = null
 
 
 
 ###
-Declares a single unit test.  For example:
+Flag used to set whether test declarations are automatically
+passed into the [run] function of Munit.
+
+  NB: Used internally for testing.
+
 ###
-it = (itText, func) -> suite?.tests[itText] = func if _.isFunction(func)
+describe.autoRun = true
+
+
+
+
+
+###
+Declares a single unit test.
+###
+it = (text, func) -> suite?.tests[text] = func if _.isFunction(func)
 
 
 ###
