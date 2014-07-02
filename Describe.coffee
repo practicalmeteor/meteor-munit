@@ -80,12 +80,15 @@ afterAll = (func) -> _suite?.suiteTearDown = wrap(func) if _.isFunction(func)
 
 # PRIVATE --------------------------------------------------------------------------
 
+
 wrap = (func) ->
+  suite = _suite
   (test, callback) ->
     self =
-      test: test
+      suite:    suite
+      test:     test
       callback: callback
-      func: func
+      func:     func
 
     func.call(self, callback)
 

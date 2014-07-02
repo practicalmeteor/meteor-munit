@@ -51,11 +51,33 @@ catch err
 
 
 describe 'Running tests from within a "describe" block', ->
-  it 'passes the [TestCaseResults] as [this]', (args...) ->
-    test = @test
-    test.equal(test.test_case.shortName, 'passes the [TestCaseResults] as [this]')
-    test.instanceOf(@func, Function)
-    test.instanceOf(@callback, Function)
+  wasBeforeAllRun = null
+  beforeEachContext = null
+
+  beforeAll -> wasBeforeAllRun = true
+  beforeEach -> beforeEachContext = @
+
+  it 'passes the [TestCaseResults] as [this]', ->
+    expect(@test.test_case.shortName).to.equal 'passes the [TestCaseResults] as [this]'
+    expect(@func).to.be.an.instanceOf Function
+    expect(@callback).to.be.an.instanceOf Function
+    expect(@suite.name).to.equal 'Running tests from within a "describe" block'
+
+  it 'runs [beforeAll]', ->
+    expect(wasBeforeAllRun).to.be.true
+
+  it 'runs [beforeEach]', ->
+    expect(beforeEachContext.test.test_case.shortName).to.equal 'runs [beforeEach]'
+
+
+
+
+
+
+
+
+
+
 
 
 
