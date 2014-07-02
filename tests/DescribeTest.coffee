@@ -71,15 +71,14 @@ describe 'Running tests from within a "describe" block', ->
 
 
 
+describe 'Asynchronous tests within an "it" block', ->
+  it 'is not asynchronous', ->
+    expect(@isAsync).to.equal false
 
 
-
-
-
-
-
-
-
+  it 'is asynchronous', (done) ->
+    onTimeout = => done()
+    Meteor.setTimeout (-> onTimeout()), 50
 
 
 
