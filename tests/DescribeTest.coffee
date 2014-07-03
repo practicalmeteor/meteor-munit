@@ -49,7 +49,6 @@ catch err
 
 
 
-
 # --------------------------------------------------------------------------
 
 
@@ -73,6 +72,8 @@ describe 'Running tests from within a "describe" block', ->
     expect(beforeEachContext.test.test_case.shortName).to.equal 'runs [beforeEach]'
 
 
+# --------------------------------------------------------------------------
+
 
 describe 'Asynchronous tests within an "it" block', ->
   it 'is not asynchronous', ->
@@ -82,6 +83,16 @@ describe 'Asynchronous tests within an "it" block', ->
     onTimeout = => done()
     Meteor.setTimeout (-> onTimeout()), 50
 
+  it 'runs finalization within the "try" helper', ->
+    onTimeout = =>
+      @try ->
+        done()
+    Meteor.setTimeout (-> onTimeout()), 50
+
+
+
+
+# --------------------------------------------------------------------------
 
 
 describe.skip 'Skip suite (describe.skip)', ->

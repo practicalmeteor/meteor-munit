@@ -17,6 +17,6 @@ Package.on_use(function (api, where) {
 
 Package.on_test(function(api) {
     api.use(["coffeescript" ,"tinytest" ,"test-helpers", "munit"]);
-    api.add_files("tests/TestRunnerTest.coffee")
+    // api.add_files("tests/TestRunnerTest.coffee")
     api.add_files("tests/DescribeTest.coffee")
 });

@@ -1,8 +1,6 @@
 _suite = null
 
 
-
-
 ###
 Defines a suite of tests.  For example:
 
@@ -35,6 +33,7 @@ describe = (text, func) ->
 
   # Finish up.
   result
+
 
 
 
@@ -120,6 +119,17 @@ wrap = (func) ->
         callback: callback
         func:     func
         isAsync:  isAsync
+
+        ###
+        Use this to invoke assertions after a callback so that
+        errors will be reported in the test runner.
+        ###
+        try: (func) ->
+          try
+            func() if _.isFunction(func)
+          catch error
+            test.onException(error)
+
 
       if isAsync
         invokeAsync = (done) -> func.call self, -> done()
