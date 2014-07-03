@@ -48,12 +48,36 @@ passed into the [run] function of Munit.
 describe.autoRun = true
 
 
+###
+Declares a suite to be skipped.
+###
+describe.skip = (text, func) ->
+  # No-op.
+  # Report that the suite is being skipped, and to not
+  # pass it in.
+  console.log "SKIPPING SUITE: #{ text }"
+
 
 
 ###
 Declares a single unit test.
+@param text:      The description of the test.
+@param func:      The test function.
 ###
 it = (text, func) -> _suite?.tests[text] = wrap(func) if _.isFunction(func)
+
+
+###
+Declares a unit test to be skipped.
+###
+it.skip = (text, func) ->
+  if _suite?
+    def = func if _.isObject(func) and not _.isFunction(func)
+    def ?= {}
+    def.func = func if _.isFunction(func)
+    def.skip = true
+    console.log "SKIPPING SUITE: #{ _suite.name } >> TEST: #{ text }"
+    it(text, def)
 
 
 ###

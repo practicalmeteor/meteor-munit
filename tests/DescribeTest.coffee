@@ -78,10 +78,27 @@ describe 'Asynchronous tests within an "it" block', ->
   it 'is not asynchronous', ->
     expect(@isAsync).to.equal false
 
-
   it 'is asynchronous', (done) ->
     onTimeout = => done()
     Meteor.setTimeout (-> onTimeout()), 50
+
+
+
+describe.skip 'Skip suite (describe.skip)', ->
+  it 'should fail', ->
+    expect(true).to.equal false
+
+
+describe 'Skip a test (it.skip)', ->
+  it.skip 'should fail', ->
+    expect(true).to.equal false
+
+  it.skip 'should fail',
+    func: ->
+      expect(true).to.equal false
+
+
+
 
 
 
