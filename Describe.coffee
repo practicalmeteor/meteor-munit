@@ -58,12 +58,19 @@ describe.skip = (text, func) ->
 
 
 
+# IT --------------------------------------------------------------------------
+
+
+
 ###
-Declares a single unit test.
+Declares a unit test.
 @param text:      The description of the test.
 @param func:      The test function.
 ###
-it = (text, func) -> _suite?.tests[text] = wrap(func) if _.isFunction(func)
+it = (text, func) ->
+  if _suite? and _.isFunction(func)
+    func = wrap(func)
+    _suite.tests[text] = { func:func }
 
 
 ###
@@ -71,12 +78,41 @@ Declares a unit test to be skipped.
 ###
 it.skip = (text, func) ->
   if _suite?
-    def = func if _.isObject(func) and not _.isFunction(func)
-    def ?= {}
-    def.func = func if _.isFunction(func)
-    def.skip = true
     console.log "SKIPPING SUITE: #{ _suite.name } >> TEST: #{ text }"
-    it(text, def)
+
+
+###
+Declares a unit test to run only on the client.
+@param text:      The description of the test.
+@param func:      The test function.
+###
+it.client = (text, func) ->
+  if _suite?
+    def = it(text, func)
+    def.type = 'client'
+    def
+
+
+###
+Declares a unit test to run only on the server.
+@param text:      The description of the test.
+@param func:      The test function.
+###
+it.server = (text, func) ->
+  if _suite?
+    def = it(text, func)
+    def.type = 'server'
+    def
+
+
+
+it.client.skip = it.skip
+it.server.skip = it.skip
+
+
+
+# SETUP / TEARDOWN --------------------------------------------------------------------------
+
 
 
 ###
@@ -130,9 +166,8 @@ wrap = (func) ->
           catch error
             test.onException(error)
 
-
       if isAsync
-        invokeAsync = (done) -> func.call self, -> done()
+        invokeAsync = (done) -> func.call self, (-> done())
         invokeAsync callback ->
 
       else

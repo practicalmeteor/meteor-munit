@@ -102,11 +102,34 @@ describe.skip 'Skip suite (describe.skip)', ->
 
 describe 'Skip a test (it.skip)', ->
   it.skip 'should fail', ->
-    expect(true).to.equal false
+    throw new Error('This should not run')
 
   it.skip 'should fail',
     func: ->
-      expect(true).to.equal false
+      throw new Error('This should not run')
+
+
+
+# --------------------------------------------------------------------------
+
+
+describe 'Specifying execution domain (client / server)', ->
+  it.client 'runs on the client only', ->
+    if Meteor.isServer
+      throw new Error('This should not run on server')
+
+  it.server 'runs on the server only', ->
+    if Meteor.isClient
+      throw new Error('This should not run on client')
+
+  it.client.skip 'skips a client-only test', ->
+    throw new Error('This should not run')
+
+  it.server.skip 'skips a server-only test', ->
+    throw new Error('This should not run')
+
+
+
 
 
 
