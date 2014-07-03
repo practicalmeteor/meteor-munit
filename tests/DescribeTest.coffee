@@ -1,3 +1,6 @@
+@expect = chai.expect
+
+
 describeSuiteTest =
   name: 'Declaring "describe" semantics'
   suiteSetup: -> describe.autoRun = false
