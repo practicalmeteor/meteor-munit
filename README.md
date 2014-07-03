@@ -273,6 +273,19 @@ To run a test asynchronously include a `done` callback, and invoke it upon compl
 and differs from the way MUnit suites handle asynchronous tests.
 
 
+To skip tests:
+
+    describe.skip 'My suite', ->
+      it 'should fail', ->
+        expect(true).to.equal false
+
+
+    describe 'My suite', ->
+      it.skip 'should fail', ->
+        expect(true).to.equal false
+
+
+
 
 
 Sample Meteor App

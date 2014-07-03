@@ -99,6 +99,3 @@ describe 'Skip a test (it.skip)', ->
 
 
 
-
-
-
