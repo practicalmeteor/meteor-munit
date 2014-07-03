@@ -287,7 +287,7 @@ describe 'My test suite', ->
 and differs from the way MUnit suites handle asynchronous tests.
 
 
-To skip tests:
+### Skipping Tests
 
 ```coffeescript
 
@@ -301,6 +301,51 @@ describe 'My suite', ->
     expect(true).to.equal false
 
 ```
+
+### Specifying Execution Domain
+You can optionally declare on both the `describe` and `it` statements whether
+the code should be executed on the `client` or the `server`.
+By default specs execute on both `client` and `server`.
+
+Specifying execution domain on the `it` statement:
+
+
+```coffeescript
+
+describe.client 'My suite', ->
+  it.client 'runs on the client only', ->
+    # ...
+
+  it.server 'runs on the server only', ->
+    # ...
+
+```
+
+
+Specifying execution domain on the `describe` statement:
+
+```coffeescript
+
+describe.client 'All tests within the suite run on the client', ->
+  it 'runs on the client only', ->
+    # ...
+
+  it.server 'overrides parent "describe.client" and runs on the server', ->
+    # ...
+
+
+
+
+describe.server 'All tests within the suite run on the server', ->
+  it 'runs on the server only', ->
+    # ...
+
+  it.client 'overrides parent "describe.server" and runs on the client', ->
+    # ...
+
+
+```
+
 
 
 
