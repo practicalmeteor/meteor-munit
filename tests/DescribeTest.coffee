@@ -113,7 +113,7 @@ describe 'Skip a test (it.skip)', ->
 # --------------------------------------------------------------------------
 
 
-describe 'Specifying execution domain (client / server)', ->
+describe 'Specifying execution domain for "it" (client / server)', ->
   it.client 'runs on the client only', ->
     if Meteor.isServer
       throw new Error('This should not run on server')
@@ -128,6 +128,39 @@ describe 'Specifying execution domain (client / server)', ->
   it.server.skip 'skips a server-only test', ->
     throw new Error('This should not run')
 
+
+
+describe.client 'Specifying execution domain for "describe" (client)', ->
+  it 'runs on the client only', ->
+    if Meteor.isServer
+      throw new Error('This should not run on server')
+
+  it.server 'overrides parent "describe.client" and runs on the server', ->
+    if Meteor.isClient
+      throw new Error('This should not run on client')
+
+
+
+describe.server 'Specifying execution domain for "describe" (server)', ->
+  it 'runs on the server only', ->
+    if Meteor.isClient
+      throw new Error('This should not run on client')
+
+
+  it.client 'overrides parent "describe.server" and runs on the client', ->
+    if Meteor.isServer
+      throw new Error('This should not run on server')
+
+
+
+describe.client.skip 'Skipping "describe.client"', ->
+  it 'should fail', ->
+    throw new Error('This should not run')
+
+
+describe.server.skip 'Skipping "describe.server"', ->
+  it 'should fail', ->
+    throw new Error('This should not run')
 
 
 

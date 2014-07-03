@@ -1,16 +1,25 @@
 _suite = null
 
 
+# runIfRequired = (suite, options = {}) ->
+#   options.run ?= true
+#   Munit.run(suite) if describe.autoRun is true and options.run is true
+
+
+
+
 ###
-Defines a suite of tests.  For example:
+Declares a suite of tests.  For example:
 
   describe 'a suite of tests', ->
     it 'does something', ->
 
-@param text: The describe text for the suite.
-@param func: The test function to run.
+@param text:      The describe text for the suite.
+@param func:      The test function to run.
+@param options:
+          type:   Optional. Execution domain: 'client', 'server'
 ###
-describe = (text, func) ->
+describe = (text, func, options = {}) ->
   # Setup initial conditions.
   return unless _.isFunction(func)
   if _suite?
@@ -18,22 +27,21 @@ describe = (text, func) ->
     _suite = null # Reset the suite.
     throw new Error('Cannot nest "describe" statements')
 
-
-
-
   # Build the set of tests within the suite.
-  _suite = result =
+  _suite = suite =
     name: text
     tests: {}
   func()
   _suite = null
 
+  # Adjust the execution domain.
+  if type = options.type
+      for key, test of suite.tests
+        test.type ?= type
+
   # Run the tests.
-  Munit.run(result) if describe.autoRun is true
-
-  # Finish up.
-  result
-
+  Munit.run(suite) if describe.autoRun is true
+  suite
 
 
 
@@ -47,6 +55,7 @@ passed into the [run] function of Munit.
 describe.autoRun = true
 
 
+
 ###
 Declares a suite to be skipped.
 ###
@@ -55,6 +64,25 @@ describe.skip = (text, func) ->
   # Report that the suite is being skipped, and to not
   # pass it in.
   console.log "SKIPPING SUITE: #{ text }"
+
+
+
+###
+Declares a suite of tests that run only on the client.
+###
+describe.client = (text, func) -> describe(text, func, type:'client')
+
+
+
+###
+Declares a suite of tests that run only on the server.
+###
+describe.server = (text, func) -> describe(text, func, type:'server')
+
+
+
+describe.client.skip = describe.skip
+describe.server.skip = describe.skip
 
 
 
