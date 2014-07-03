@@ -169,104 +169,118 @@ JavaScript Example
 
 #[CoffeeScript](coffeescript.org) Example
 
+```coffeescript
 
-	class TestSuiteExample
 
-	  name: "TestSuiteExample"
+class TestSuiteExample
 
-	  suiteSetup: ->
+  name: "TestSuiteExample"
 
-	  setup: ->
+  suiteSetup: ->
 
-	  testAsync: (test, done) ->
-	    myAsyncFunction done((value) ->
-	      test.isNotNull value
-	    )
+  setup: ->
 
-	  testIsTrue: (test) ->
-	    test.isTrue true
+  testAsync: (test, done) ->
+    myAsyncFunction done((value) ->
+      test.isNotNull value
+    )
 
-	  clientTestIsClient: (test) ->
-	    test.isTrue Meteor.isClient
-	    test.isFalse Meteor.isServer
+  testIsTrue: (test) ->
+    test.isTrue true
 
-	  serverTestIsServer: (test) ->
-	    test.isTrue Meteor.isServer
-	    test.isFalse Meteor.isClient
+  clientTestIsClient: (test) ->
+    test.isTrue Meteor.isClient
+    test.isFalse Meteor.isServer
 
-	  tests: [
-	    {
-	      name: "sync test"
-	      func: (test)->
+  serverTestIsServer: (test) ->
+    test.isTrue Meteor.isServer
+    test.isFalse Meteor.isClient
 
-	    },
-	    {
-	      name: "async test"
-	      skip: true
-	      func: (test, done)->
-	        myAsyncFunction done((value)->
-	          test.isNotNull(value)
-	        )
+  tests: [
+    {
+      name: "sync test"
+      func: (test)->
 
-	    },
-	    {
-	      name: "test with timeout"
-	      type: "client"
-	      timeout: 5000
-	      func: (test)->
-	        test.isTrue Meteor.isClient
-	    }
-	  ]
+    },
+    {
+      name: "async test"
+      skip: true
+      func: (test, done)->
+        myAsyncFunction done((value)->
+          test.isNotNull(value)
+        )
 
-	  tearDown: ->
+    },
+    {
+      name: "test with timeout"
+      type: "client"
+      timeout: 5000
+      func: (test)->
+        test.isTrue Meteor.isClient
+    }
+  ]
 
-	  suiteTearDown: ->
+  tearDown: ->
 
-	Munit.run(new TestSuiteExample())
+  suiteTearDown: ->
+
+Munit.run(new TestSuiteExample())
+
+```
 
 
 ## Declaring Tests as an Object.
 Alternatively you can declare the `tests` as an object, for example:
 
 
-		class TestSuiteExample
-			name: "TestSuiteExample"
+```coffeescript
 
-			tests:
-			  myTest1: (test) -> # Name parsed to "My Test 1"
+class TestSuiteExample
+	name: "TestSuiteExample"
 
-			  myTest2:
-			    skip: true
-			    func: (test) -> # Name parsed to "My Test 2"
+	tests:
+	  myTest1: (test) -> # Name parsed to "My Test 1"
 
+	  myTest2:
+	    skip: true
+	    func: (test) -> # Name parsed to "My Test 2"
+
+```
 
 
 ## Delcaring Tests with BDD Semantics
 MUnit also allows you to use `describe` and `it` declaration blocks to declare tests:
 
 
-    describe 'My test suite', ->
+```coffeescript
 
-      beforeAll ->  # Runs once before all tests within the suite (suiteSetup.
-      beforeEach -> # Runs before each test (setup).
+describe 'My test suite', ->
 
-      it 'does something', ->
-        expect(true).to.equal true
+  beforeAll ->  # Runs once before all tests within the suite (suiteSetup.
+  beforeEach -> # Runs before each test (setup).
 
-      afterEach -> # Runs after each test (tearDown).
-      afterAll ->  # Runs after all tests (suiteTearDown)
+  it 'does something', ->
+    expect(true).to.equal true
 
+  afterEach -> # Runs after each test (tearDown).
+  afterAll ->  # Runs after all tests (suiteTearDown)
+
+```
 
 To run a test asynchronously include a `done` callback, and invoke it upon completion:
 
-    describe 'My test suite', ->
-      it 'does something asynchronously', (done) ->
+```coffeescript
 
-        onComplete = ->
-          expect(true).to.equal true
-          done()
+describe 'My test suite', ->
+  it 'does something asynchronously', (done) ->
 
-        Meteor.setTimeout (-> onComplete()), 1000
+    onComplete = ->
+      expect(true).to.equal true
+      done()
+
+    Meteor.setTimeout (-> onComplete()), 1000
+
+```
 
 
 **NOTE**: This callback behavior works the way Mocha handles callbacks within BDD style tests
@@ -275,16 +289,18 @@ and differs from the way MUnit suites handle asynchronous tests.
 
 To skip tests:
 
-    describe.skip 'My suite', ->
-      it 'should fail', ->
-        expect(true).to.equal false
+```coffeescript
+
+describe.skip 'My suite', ->
+  it 'should fail', ->
+    expect(true).to.equal false
 
 
-    describe 'My suite', ->
-      it.skip 'should fail', ->
-        expect(true).to.equal false
+describe 'My suite', ->
+  it.skip 'should fail', ->
+    expect(true).to.equal false
 
-
+```
 
 
 
