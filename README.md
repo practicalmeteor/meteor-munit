@@ -12,7 +12,7 @@ Installation
 
 
 ## Declaring Tests with BDD Semantics
-MUnit also allows you to use `describe` and `it` declaration blocks to declare tests:
+MUnit allows you to use `describe` and `it` declaration blocks to declare tests:
 
 
 ```coffeescript
