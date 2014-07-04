@@ -10,6 +10,109 @@ Installation
 ========================
 ``mrt add munit``
 
+
+## Declaring Tests with BDD Semantics
+MUnit also allows you to use `describe` and `it` declaration blocks to declare tests:
+
+
+```coffeescript
+
+describe 'My test suite', ->
+
+  beforeAll ->  # Runs once before all tests within the suite (suiteSetup.
+  beforeEach -> # Runs before each test (setup).
+
+  it 'does something', ->
+    expect(true).to.equal true
+
+  afterEach -> # Runs after each test (tearDown).
+  afterAll ->  # Runs after all tests (suiteTearDown)
+
+```
+
+To run a test asynchronously include a `done` callback, and invoke it upon completion:
+
+```coffeescript
+
+describe 'My test suite', ->
+  it 'does something asynchronously', (done) ->
+
+    onComplete = ->
+      expect(true).to.equal true
+      done()
+
+    Meteor.setTimeout (-> onComplete()), 1000
+
+```
+
+
+**NOTE**: This callback behavior works the way Mocha handles callbacks within BDD style tests
+and differs from the way MUnit suites handle asynchronous tests.
+
+
+### Skipping Tests
+
+```coffeescript
+
+describe.skip 'My suite', ->
+  it 'should fail', ->
+    expect(true).to.equal false
+
+
+describe 'My suite', ->
+  it.skip 'should fail', ->
+    expect(true).to.equal false
+
+```
+
+### Specifying Execution Domain
+You can optionally declare on both the `describe` and `it` statements whether
+the code should be executed on the `client` or the `server`.
+By default specs execute on both `client` and `server`.
+
+Specifying execution domain on the `it` statement:
+
+
+```coffeescript
+
+describe.client 'My suite', ->
+  it.client 'runs on the client only', ->
+    # ...
+
+  it.server 'runs on the server only', ->
+    # ...
+
+```
+
+
+Specifying execution domain on the `describe` statement:
+
+```coffeescript
+
+describe.client 'All tests within the suite run on the client', ->
+  it 'runs on the client only', ->
+    # ...
+
+  it.server 'overrides parent "describe.client" and runs on the server', ->
+    # ...
+
+
+
+
+describe.server 'All tests within the suite run on the server', ->
+  it 'runs on the server only', ->
+    # ...
+
+  it.client 'overrides parent "describe.server" and runs on the client', ->
+    # ...
+
+
+```
+
+
+
+
+
 Creating Test Suites
 ========================
 With **Munit**, you organize your tests into test suite objects (or CoffeeScript classes). Each test suite can have the following methods and properties.
@@ -246,107 +349,6 @@ class TestSuiteExample
 	    func: (test) -> # Name parsed to "My Test 2"
 
 ```
-
-
-## Delcaring Tests with BDD Semantics
-MUnit also allows you to use `describe` and `it` declaration blocks to declare tests:
-
-
-```coffeescript
-
-describe 'My test suite', ->
-
-  beforeAll ->  # Runs once before all tests within the suite (suiteSetup.
-  beforeEach -> # Runs before each test (setup).
-
-  it 'does something', ->
-    expect(true).to.equal true
-
-  afterEach -> # Runs after each test (tearDown).
-  afterAll ->  # Runs after all tests (suiteTearDown)
-
-```
-
-To run a test asynchronously include a `done` callback, and invoke it upon completion:
-
-```coffeescript
-
-describe 'My test suite', ->
-  it 'does something asynchronously', (done) ->
-
-    onComplete = ->
-      expect(true).to.equal true
-      done()
-
-    Meteor.setTimeout (-> onComplete()), 1000
-
-```
-
-
-**NOTE**: This callback behavior works the way Mocha handles callbacks within BDD style tests
-and differs from the way MUnit suites handle asynchronous tests.
-
-
-### Skipping Tests
-
-```coffeescript
-
-describe.skip 'My suite', ->
-  it 'should fail', ->
-    expect(true).to.equal false
-
-
-describe 'My suite', ->
-  it.skip 'should fail', ->
-    expect(true).to.equal false
-
-```
-
-### Specifying Execution Domain
-You can optionally declare on both the `describe` and `it` statements whether
-the code should be executed on the `client` or the `server`.
-By default specs execute on both `client` and `server`.
-
-Specifying execution domain on the `it` statement:
-
-
-```coffeescript
-
-describe.client 'My suite', ->
-  it.client 'runs on the client only', ->
-    # ...
-
-  it.server 'runs on the server only', ->
-    # ...
-
-```
-
-
-Specifying execution domain on the `describe` statement:
-
-```coffeescript
-
-describe.client 'All tests within the suite run on the client', ->
-  it 'runs on the client only', ->
-    # ...
-
-  it.server 'overrides parent "describe.client" and runs on the server', ->
-    # ...
-
-
-
-
-describe.server 'All tests within the suite run on the server', ->
-  it 'runs on the server only', ->
-    # ...
-
-  it.client 'overrides parent "describe.server" and runs on the client', ->
-    # ...
-
-
-```
-
-
 
 
 Sample Meteor App
