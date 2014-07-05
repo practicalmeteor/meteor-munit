@@ -348,11 +348,14 @@ class TestSuiteExample
 	name: "TestSuiteExample"
 
 	tests:
-	  myTest1: (test) -> # Name parsed to "My Test 1"
+	  myTest1: (test) ->
 
 	  myTest2:
 	    skip: true
-	    func: (test) -> # Name parsed to "My Test 2"
+	    func: (test) ->
+
+    'My Test named with a sentence': (test) ->
+
 
 ```
 
