@@ -19,7 +19,7 @@ MUnit allows you to use `describe` and `it` declaration blocks to declare tests:
 
 describe 'My test suite', ->
 
-  beforeAll ->  # Runs once before all tests within the suite (suiteSetup.
+  beforeAll ->  # Runs once before all tests within the suite (suiteSetup).
   beforeEach -> # Runs before each test (setup).
 
   it 'does something', ->
@@ -75,7 +75,7 @@ Specifying execution domain on the `it` statement:
 
 ```coffeescript
 
-describe.client 'My suite', ->
+describe 'My suite', ->
   it.client 'runs on the client only', ->
     # ...
 
@@ -98,14 +98,12 @@ describe.client 'All tests within the suite run on the client', ->
 
 
 
-
 describe.server 'All tests within the suite run on the server', ->
   it 'runs on the server only', ->
     # ...
 
   it.client 'overrides parent "describe.server" and runs on the client', ->
     # ...
-
 
 ```
 
@@ -182,92 +180,100 @@ In addition munit depends on:
 2. The excellent [sinon](https://atmospherejs.com/package/sinon) test spies, stubs and mocks JavaScript library, wrapped for meteor:
 
 Writting Async Tests
-==
-    myAsyncFunction = function(callback){
-       setTimeout(function(){
-         callback(true)
-       },1000)
-    }
+========================
 
-    mySuite = {
-      testExample: function (test, done) {
-        myAsyncFunction(done(function (value) {
-          test.isNotNull(value);
-        }));
-      }
-    }
+```javascript
+
+myAsyncFunction = function(callback){
+   setTimeout(function(){
+     callback(true)
+   },1000)
+}
+
+mySuite = {
+  testExample: function (test, done) {
+    myAsyncFunction(done(function (value) {
+      test.isNotNull(value);
+    }));
+  }
+}
+```
+
 
 The `done` argument is the `onComplete` function passed to a test function by `Tinytest.addAsync`.
 
 JavaScript Example
 ========================
 
-	TestSuiteExample = {
+```javascript
 
-	  name: "TestSuiteExample",
+TestSuiteExample = {
 
-	  suiteSetup: function () {
-	  },
+  name: "TestSuiteExample",
 
-	  setup: function () {
-	  },
+  suiteSetup: function () {
+  },
 
-	  testAsync: function (test,done) {
-	    myAsyncFunction(done(function (value) {
-	      test.isNotNull(value);
-	    }));
-	  },
+  setup: function () {
+  },
 
-	  testIsTrue: function (test) {
-	    test.isTrue(true);
-	  },
+  testAsync: function (test,done) {
+    myAsyncFunction(done(function (value) {
+      test.isNotNull(value);
+    }));
+  },
 
-	  clientTestIsClient: function (test) {
-	    test.isTrue(Meteor.isClient);
-	    test.isFalse(Meteor.isServer);
-	  },
+  testIsTrue: function (test) {
+    test.isTrue(true);
+  },
 
-	  serverTestIsServer: function(test){
-	    test.isTrue(Meteor.isServer);
-	    test.isFalse(Meteor.isClient);
-	  },
+  clientTestIsClient: function (test) {
+    test.isTrue(Meteor.isClient);
+    test.isFalse(Meteor.isServer);
+  },
 
-	  tests: [
-	    {
-	      name: "sync test",
-	      func: function (test) {
-	        test.isTrue(true)
-	      }
-	    },
-	    {
-	      name: "async test",
-	      skip: true,
-	      func: function (test, done) {
-	        myAsyncFunction(done(function (value) {
-	          test.isNotNull(value);
-	        }));
-	      }
-	    },
-	    {
-	      name: "test with timeout",
-	      type: "client",
-	      timeout: 5000,
-	      func: function (test) {
-	        test.isTrue(Meteor.isClient);
-	      }
-	    }
-	  ],
+  serverTestIsServer: function(test){
+    test.isTrue(Meteor.isServer);
+    test.isFalse(Meteor.isClient);
+  },
 
-	  tearDown: function () {
-	  },
+  tests: [
+    {
+      name: "sync test",
+      func: function (test) {
+        test.isTrue(true)
+      }
+    },
+    {
+      name: "async test",
+      skip: true,
+      func: function (test, done) {
+        myAsyncFunction(done(function (value) {
+          test.isNotNull(value);
+        }));
+      }
+    },
+    {
+      name: "test with timeout",
+      type: "client",
+      timeout: 5000,
+      func: function (test) {
+        test.isTrue(Meteor.isClient);
+      }
+    }
+  ],
 
-	  suiteTearDown: function () {
-	  }
+  tearDown: function () {
+  },
 
-	}
+  suiteTearDown: function () {
+  }
 
-	Munit.run(TestSuiteExample);
+}
 
+Munit.run(TestSuiteExample);
+
+```
 
 
 #[CoffeeScript](coffeescript.org) Example
