@@ -1,50 +1,42 @@
+Helper = (helper)->
+
+  _objs: {}
+
+  create: (name, obj, method)->
+
+    if not name or not obj
+      return sinon.spy()
+    if not obj
+      return @_objs[name] = sinon.spy()
+
+    expect(name).to.be.a("string")
+    expect(obj).to.be.an("object")
+    expect(method).to.be.a("string")
+    @_objs[name] ?= sinon[helper](obj,method)
+    return @_objs[name]
+
+  get: (name)->
+    @_objs[name]
+
+  restore:(name)->
+    if not @_objs[name]
+      console.warn "Trying to restore a non-exising #{helper} with name: #{name}"
+    @_objs[name]?.restore()
+    delete @_objs[name]
+
+
+  restoreAll: ->
+    for key of @_objs
+      @restore(key)
+
 # A test spy is a function that records arguments, return value,
 # the value of this and exception thrown (if any) for all its calls.
 # A test spy can be an anonymous function or it can wrap an existing function.
 # To learn more http://sinonjs.org/docs/#spies-api
-class Spies
 
-  spies = {}
-
-  @create:(name,obj,method)->
-    expect(name).to.be.a("string")
-    expect(obj).to.be.an("object")
-    expect(method).to.be.a("string")
-    spies[name] ?= sinon.spy(obj,method)
-    return spies[name]
-
-
-  @get:(name)->
-    spies[name]
-
-
-  @restore:(name)->
-    spies[name]?.restore()
-    delete spies[name]
-
-Munit.spies = Spies
-
+Munit.spies = Helper("spy");
 
 
 # Test stubs are functions (spies) with pre-programmed behavior.
 # This is a wrapper for sinonjs stubs to learn more http://sinonjs.org/docs/#stubs-api
-class Stubs
-
-  stubs = {}
-
-  @create:(name,obj,method)->
-    expect(name).to.be.a("string")
-    expect(obj).not.to.be.null
-    expect(method).to.be.a("string")
-    stubs[name] ?= sinon.stub(obj,method)
-    return stubs[name]
-
-
-  @get:(name)->
-    stubs[name]
-
-  @restore:(name)->
-    stubs[name]?.restore()
-    delete stubs[name]
-
-Munit.stubs = Stubs
+Munit.stubs = Helper("stub");
