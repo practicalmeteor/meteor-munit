@@ -3,16 +3,11 @@ Helper = (helper)->
   _objs: {}
 
   create: (name, obj, method)->
-
-    if not name or not obj
-      return sinon.spy()
-    if not obj
-      return @_objs[name] = sinon.spy()
-
     expect(name).to.be.a("string")
     expect(obj).to.be.an("object")
     expect(method).to.be.a("string")
-    @_objs[name] ?= sinon[helper](obj,method)
+    restore name if @_objs[name]
+    @_objs[name] = sinon[helper](obj, method)
     return @_objs[name]
 
   get: (name)->
@@ -21,7 +16,9 @@ Helper = (helper)->
   restore:(name)->
     if not @_objs[name]
       console.warn "Trying to restore a non-exising #{helper} with name: #{name}"
-    @_objs[name]?.restore()
+      return
+
+    @_objs[name].restore()
     delete @_objs[name]
 
 
