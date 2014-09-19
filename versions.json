@@ -82,11 +82,11 @@
     ],
     [
       "spacejamio:chai",
-      "0.1.6"
+      "1.0.0"
     ],
     [
       "spacejamio:sinon",
-      "0.1.6"
+      "1.0.0"
     ],
     [
       "test-helpers",
