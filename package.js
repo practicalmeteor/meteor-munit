@@ -7,6 +7,8 @@ Package.describe({
 
 Package.onUse(function (api, where) {
   api.use(["coffeescript", "underscore"]);
+  api.use(["tinytest","test-helpers"]);
+  api.use(["spacejamio:chai","spacejamio:sinon"]);
 
   api.imply(["tinytest","test-helpers"]);
   api.imply(["spacejamio:chai","spacejamio:sinon"]);
