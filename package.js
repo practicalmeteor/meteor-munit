@@ -6,6 +6,8 @@ Package.describe({
 });
 
 Package.onUse(function (api, where) {
+  api.versionsFrom('0.9.0');
+
   api.use(["coffeescript", "underscore"]);
   api.use(["tinytest","test-helpers"]);
   api.use(["spacejamio:chai","spacejamio:sinon"]);
