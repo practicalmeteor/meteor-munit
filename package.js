@@ -10,10 +10,10 @@ Package.onUse(function (api, where) {
 
   api.use(["coffeescript", "underscore"]);
   api.use(["tinytest","test-helpers"]);
-  api.use(["spacejamio:chai","spacejamio:sinon"]);
+  api.use(["spacejamio:chai@1.0.0", "spacejamio:sinon@1.0.0"]);
 
   api.imply(["tinytest","test-helpers"]);
-  api.imply(["spacejamio:chai","spacejamio:sinon"]);
+  api.imply(["spacejamio:chai@1.0.0", "spacejamio:sinon@1.0.0"]);
 
   api.addFiles("namespaces.js");
   api.addFiles("async_multi.js");
