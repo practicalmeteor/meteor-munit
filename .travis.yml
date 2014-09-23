@@ -1,14 +1,14 @@
 language: node_js
 node_js:
-  - "0.10"
+  - "0.10.29"
+
 before_install:
   - "curl https://install.meteor.com | /bin/sh"
-  - "npm install -g meteorite"
   - "npm install -g coffee-script"
   - "npm install -g spacejam"
-  - "mrt update"
-  - "export PACKAGE_DIRS=`pwd`/packages"
+
 script: "spacejam test-packages ./"
+
 branches:
   only:
     - master
