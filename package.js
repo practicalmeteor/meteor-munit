@@ -10,10 +10,10 @@ Package.onUse(function (api, where) {
 
   api.use(["coffeescript", "underscore"]);
   api.use(["tinytest","test-helpers"]);
-  api.use(["spacejamio:chai@1.0.0", "spacejamio:sinon@1.0.0"]);
+  api.use(["spacejamio:chai@1.9.2_1", "spacejamio:sinon@1.10.3_1"]);
 
   api.imply(["tinytest","test-helpers"]);
-  api.imply(["spacejamio:chai@1.0.0", "spacejamio:sinon@1.0.0"]);
+  api.imply(["spacejamio:chai@1.9.2_1", "spacejamio:sinon@1.10.3_1"]);
 
   api.addFiles("namespaces.js");
   api.addFiles("async_multi.js");
@@ -22,7 +22,7 @@ Package.onUse(function (api, where) {
   api.addFiles("Describe.coffee");
 
   api.export(['lvTestAsyncMulti']);
-  api.export(['Munit', 'chai']);
+  api.export(['Munit']);
   api.export(['describe', 'it', 'beforeAll', 'beforeEach', 'afterEach', 'afterAll']);
 });
 
