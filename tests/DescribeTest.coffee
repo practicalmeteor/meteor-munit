@@ -34,11 +34,11 @@ describeSuiteTest =
                 afterAll(func)
       test.instanceOf(suite.suiteTearDown, Function)
 
-    'throws if nesting describes': (test) ->
-      func = ->
-        describe 'parent', ->
-          describe 'child', ->
-      test.throws func, 'Cannot nest "describe" statements'
+    'allows nesting of describe blocks': (test) ->
+      
+      suite = describe 'parent', -> describe 'child', -> describe 'grand child', ->
+
+      test.equal(suite.nestedPrefix, 'child - grand child - ')
 
 
 
@@ -71,6 +71,37 @@ describe 'Running tests from within a "describe" block', ->
   it 'runs [beforeEach]', ->
     expect(beforeEachContext.test.test_case.shortName).to.equal 'runs [beforeEach]'
 
+
+describe 'Running tests from within nested describe blocks', ->
+
+  sharedData = {}
+
+  beforeEach -> @suite.shared = sharedData
+
+  it 'runs the first-level tests correctly', ->
+
+    expect(@suite.name).to.equal 'Running tests from within nested describe blocks'
+    expect(@test.test_case.shortName).to.equal "runs the first-level tests correctly"
+    expect(@test.test_case.name).to.equal "#{@suite.name} - runs the first-level tests correctly"
+    expect(@suite.shared).to.equal sharedData
+
+  describe 'when nesting', ->
+
+    it 'adds dashes to generate tinytest group paths', ->
+
+      expect(@suite.name).to.equal 'Running tests from within nested describe blocks'
+      expect(@test.test_case.shortName).to.equal "adds dashes to generate tinytest group paths"
+      expect(@test.test_case.name).to.equal "#{@suite.name} - when nesting - #{@test.test_case.shortName}"
+      expect(@suite.shared).to.equal sharedData
+
+    describe 'multi nesting', ->
+
+      it 'can handle any depth of nesting', ->
+
+        expect(@suite.name).to.equal 'Running tests from within nested describe blocks'
+        expect(@test.test_case.shortName).to.equal "can handle any depth of nesting"
+        expect(@test.test_case.name).to.equal "#{@suite.name} - when nesting - multi nesting - #{@test.test_case.shortName}"
+        expect(@suite.shared).to.equal sharedData
 
 # --------------------------------------------------------------------------
 
