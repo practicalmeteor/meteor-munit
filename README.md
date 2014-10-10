@@ -1,151 +1,171 @@
 [![Build Status](https://travis-ci.org/spacejamio/meteor-munit.svg?branch=master)](https://travis-ci.org/spacejamio/meteor-munit)
-Munit
-========================
+
+## Munit
 
 **Munit** stands for meteor unit (tests). It is a wrapper around Tinytest, the package testing framework shipped with meteor. **Munit** adds support for test suites and some additional functionality that is standard in other testing frameworks, such as test timeouts, setup, tearDown, suiteSetup, and suiteTearDown.
 
 For additional information regarding Tinytest, please refer to this excellent screencast from the guys at EventedMind: [Testing Packages with Tinytest](https://www.eventedmind.com/feed/meteor-testing-packages-with-tinytest
 )
 
-Installation
-========================
-``mrt add munit``
+## Installation
 
+``meteor add spacejamio:munit``
 
-## Declaring Tests with BDD Semantics
+[spacejamio:chai](https://atmospherejs.com/spacejamio/chai) and [spacejamio:sinon](https://atmospherejs.com/spacejamio/sinon) will be automatically added as well, which you can use in your tests.
+
+## BDD Interface
+
 MUnit allows you to use `describe` and `it` declaration blocks to declare tests:
 
+```javascript
 
-```coffeescript
-
-describe 'My test suite', ->
-
-  beforeAll ->  # Runs once before all tests within the suite (suiteSetup).
-  beforeEach -> # Runs before each test (setup).
-
-  it 'does something', ->
-    expect(true).to.equal true
-
-  afterEach -> # Runs after each test (tearDown).
-  afterAll ->  # Runs after all tests (suiteTearDown)
-
+describe('suite1', function(){
+  beforeAll(function (){
+    // Let's do 'cleanup' beforeEach too, in case another suite didn't clean up properly
+    spies.restoreAll();
+    stubs.restoreAll();
+    console.log("I'm beforeAll");
+  });
+  beforeEach(function (){
+    console.log("I'm beforeEach");
+    spies.create('log', console, 'log');
+  });
+  afterEach(function (){
+    spies.restoreAll();
+    console.log("I'm afterEach");
+  });
+  afterAll(function (){
+    console.log("I'm afterAll");
+    spies.restoreAll();
+    stubs.restoreAll();
+  });
+  it('test1', function(){
+    console.log('Hello world');
+    expect(spies.log).to.have.been.calledWith('Hello world');
+  })
+});
 ```
+
+## Asynchronous Tests
 
 To run a test asynchronously include a `done` callback, and invoke it upon completion:
 
-```coffeescript
+```javascript
 
-describe 'My test suite', ->
-  it 'does something asynchronously', (done) ->
+describe('suite2', function(){
+  it('async test', function(done){
+    var onTimeout = function () {
+      done();
+    };
+    Meteor.setTimeout(onTimeout, 50);
+  });
+});
+```
 
-    onComplete = ->
-      expect(true).to.equal true
-      done()
+**NOTE**: The BDD interface supports async tests using a done function, similar to the way Mocha supports async tests. This differs from the way the MUnit TDD interface handle asynchronous tests.
 
-    Meteor.setTimeout (-> onComplete()), 1000
+
+### Skipping Tests & Test Suites
+
+```javascript
+
+// Skipped suite
+describe.skip('skipped suite', function(){
+  it('work in progress', function(){
+    expect(false).to.be.true;
+  });
+});
+
+// Skipped test
+describe('suite with skipped test', function(){
+  it.skip('skipped test', function(){
+    expect(false).to.be.true;
+  });
+});
 
 ```
 
+### Server & Client Only Tests & Test Suites
 
-**NOTE**: This callback behavior works the way Mocha handles callbacks within BDD style tests
-and differs from the way MUnit suites handle asynchronous tests.
+Server & Client Only Tests:
 
+```javascript
 
-### Skipping Tests
-
-```coffeescript
-
-describe.skip 'My suite', ->
-  it 'should fail', ->
-    expect(true).to.equal false
-
-
-describe 'My suite', ->
-  it.skip 'should fail', ->
-    expect(true).to.equal false
-
+describe('client only and server only tests', function(){
+  it.client('runs only in client', function(){
+    expect(Meteor.isClient).to.be.true;
+  });
+  it.server('runs only in server', function(){
+    expect(Meteor.isServer).to.be.true;
+  });
+});
 ```
 
-### Specifying Execution Domain
-You can optionally declare on both the `describe` and `it` statements whether
-the code should be executed on the `client` or the `server`.
-By default specs execute on both `client` and `server`.
+Server & Client Only Test Suites:
 
-Specifying execution domain on the `it` statement:
+```javascript
 
+describe.client('client only test suite', function(){
+  it('runs only in client', function(){
+    expect(Meteor.isClient).to.be.true;
+  });
+  it.server('overrides describe.client and runs only in server', function(){
+    expect(Meteor.isServer).to.be.true;
+  });
+});
 
-```coffeescript
-
-describe 'My suite', ->
-  it.client 'runs on the client only', ->
-    # ...
-
-  it.server 'runs on the server only', ->
-    # ...
-
+describe.server('server only test suite', function(){
+  it('runs only in server', function(){
+    expect(Meteor.isServer).to.be.true;
+  });
+  it.client('overrides describe.server and runs only in client', function(){
+    expect(Meteor.isClient).to.be.true;
+  });
+});
 ```
 
+## TDD Interface
 
-Specifying execution domain on the `describe` statement:
+The TDD interface defers from the BDD interface in that it allows you to specify timeouts per test as well as in it's asynchronous tests semantics.
 
-```coffeescript
+Create a JavaScript object or CoffeeScript class, with the following properties:
 
-describe.client 'All tests within the suite run on the client', ->
-  it 'runs on the client only', ->
-    # ...
+* `name`: String. The test suite name, with support for dashes for sub-grouping, as in Tinytest
+* `suiteSetup`: Function. Runs once before all tests.
+* `suiteTearDown`: Function. Runs once after all tests.
+* `setup`: Function. Runs before each test.
+* `tearDown`: Function. Runs after each test.
+* `test<Name>` Function. Any function prefixed with `test` will run as a test case.
+* `clientTest<Name>` Same as above, but will only run in the browser.
+* `serverTest<Name>` Same as above, but will only run on the server.
+* `tests`: In addition to test functions that start with 'test', you can provide an array of test objects, with additional fine tuning and control options.
 
-  it.server 'overrides parent "describe.client" and runs on the server', ->
-    # ...
-
-
-
-describe.server 'All tests within the suite run on the server', ->
-  it 'runs on the server only', ->
-    # ...
-
-  it.client 'overrides parent "describe.server" and runs on the client', ->
-    # ...
-
-```
-
-
-
-
-
-Creating Test Suites
-========================
-With **Munit**, you organize your tests into test suite objects (or CoffeeScript classes). Each test suite can have the following methods and properties.
-
-* `name`: the test suite name, with support for dashes for sub-grouping, as in Tinytest
-* `suiteSetup`: runs once before all tests
-* `suiteTearDown`: runs once after all tests
-* `setup`: runs before each test
-* `tearDown`: runs after each test
-* `tests`: an array of test cases, in the format below, OR:
-* `test<Name>` any function prefixed with `test` will run as a test case
-* `clientTest<Name>` same as above, but will only run in the browser
-* `serverTest<Name>` same as above, but will only run on the server
-
-The test cases in the array of `tests`, can have the following properties:
+Each test object in the `tests` array, can have the following properties:
 
 * `name`: the name of the test case (**required**)
 * `func`: the test case function (**required**)
-* `type`: where to run the tests, either `client` or `server`. If doesn't exist, runs on both
+* `type`: where to run the tests, either `client` or `server`. By default, runs in both.
 * `timeout`: test timeout, in milliseconds (**default 5000**)
 * `skip`: skip the test
 
-To run your test suite tests, just:
+To run your test suite, just:
 
 `Munit.run( yourTestSuiteObject );`
 
+### Synchronous Tests
 
-Writing Tests
-========================
-	mySuite = {
-		testExample:function(test){
-			test.isTrue(true)
-		}
-	}
+```javascript
+
+mySyncSuite = {
+  testSyncTest: function(test){
+    test.isTrue(true);
+  }
+}
+
+Munit.run(mySuite);
+```
+
+### The test argument
 
 The `test` argument is the same test object passed to a test function by `Tinytest.add`, and has the following methods:
 
@@ -167,65 +187,66 @@ The `test` argument is the same test object passed to a test function by `Tinyte
 
 The `msg` property is a custom error message for the assertion.
 
+You can use either the test object for your assertions or the included spacejamio:chai library.
+
 You can see the source code [here](https://github.com/meteor/meteor/blob/devel/packages/tinytest/tinytest.js).
 
-In addition munit depends on:
-
-1. The excellent [chai](https://atmospherejs.com/package/chai) BDD / TDD assertion library that we wrapped for meteor, so you can use all it's goodies exported into:
-
- * expect
- * assert
- * should
-
-
-2. The excellent [sinon](https://atmospherejs.com/package/sinon) test spies, stubs and mocks JavaScript library, wrapped for meteor:
-
-Writting Async Tests
-========================
+### Asynchronous Tests
 
 ```javascript
 
-myAsyncFunction = function(callback){
-   setTimeout(function(){
-     callback(true)
-   },1000)
-}
+myAsyncSuite = {
+  name: 'myAsyncSuite',
 
-mySuite = {
-  testExample: function (test, done) {
-    myAsyncFunction(done(function (value) {
-      test.isNotNull(value);
-    }));
+  testAsyncTest: function(test, waitFor){
+
+    var onTimeout = function(){
+      test.isTrue(true);
+    }
+
+    Meteor.setTimeout(waitFor(onTimeout), 50);
   }
-}
+};
+
+Munit.run(myAsyncSuite);
 ```
 
+The `waitFor` argument is the `expect` function wrapper passed to a test by testAsyncMulti from the meteor test-helpers package. In your test, you need to wrap your async callback function with waitFor, so testAsyncMulti knows that the test became asynchronous and a callback is pending. Unfortunately, you cannot have more than one async function call per test, due to the way testAsyncMulti works.
 
-The `done` argument is the `onComplete` function passed to a test function by `Tinytest.addAsync`.
-
-JavaScript Example
-========================
+## Complete Example
 
 ```javascript
 
-TestSuiteExample = {
+tddTestSuite = {
 
-  name: "TestSuiteExample",
+  name: "TDD test suite",
 
   suiteSetup: function () {
+    // Let's do 'cleanup' in suiteSetup too, in case another suite didn't clean up properly
+    spies.restoreAll();
+    stubs.restoreAll();
+    console.log("I'm suiteSetup");
   },
 
   setup: function () {
+    console.log("I'm setup");
+    spies.create('log', console, 'log');
   },
 
-  testAsync: function (test,done) {
-    myAsyncFunction(done(function (value) {
-      test.isNotNull(value);
-    }));
+  tearDown: function () {
+    spies.restoreAll();
+    console.log("I'm tearDown");
   },
 
-  testIsTrue: function (test) {
-    test.isTrue(true);
+  suiteTearDown: function () {
+    console.log("I'm suiteTearDown");
+    spies.restoreAll();
+    stubs.restoreAll();
+  },
+
+  testSpies: function (test) {
+    console.log('Hello world');
+    expect(spies.log).to.have.been.calledWith('Hello world');
   },
 
   clientTestIsClient: function (test) {
@@ -240,139 +261,42 @@ TestSuiteExample = {
 
   tests: [
     {
-      name: "sync test",
+      name: "skipped client test",
+      type: 'client',
+      skip: true,
       func: function (test) {
         test.isTrue(true)
       }
     },
     {
-      name: "async test",
-      skip: true,
-      func: function (test, done) {
-        myAsyncFunction(done(function (value) {
-          test.isNotNull(value);
-        }));
+      name: "async test with timeout",
+      timeout: 500,
+      func: function (test, waitFor) {
+        var onTimeout = function(){
+          test.isTrue(true);
+        };
+
+        Meteor.setTimeout(waitFor(onTimeout), 50);
       }
-    },
-    {
-      name: "test with timeout",
-      type: "client",
-      timeout: 5000,
-      func: function (test) {
-        test.isTrue(Meteor.isClient);
-      }
-    }
-  ],
-
-  tearDown: function () {
-  },
-
-  suiteTearDown: function () {
-  }
-
-}
-
-Munit.run(TestSuiteExample);
-
-```
-
-
-#[CoffeeScript](coffeescript.org) Example
-
-```coffeescript
-
-
-class TestSuiteExample
-
-  name: "TestSuiteExample"
-
-  suiteSetup: ->
-
-  setup: ->
-
-  testAsync: (test, done) ->
-    myAsyncFunction done((value) ->
-      test.isNotNull value
-    )
-
-  testIsTrue: (test) ->
-    test.isTrue true
-
-  clientTestIsClient: (test) ->
-    test.isTrue Meteor.isClient
-    test.isFalse Meteor.isServer
-
-  serverTestIsServer: (test) ->
-    test.isTrue Meteor.isServer
-    test.isFalse Meteor.isClient
-
-  tests: [
-    {
-      name: "sync test"
-      func: (test)->
-
-    },
-    {
-      name: "async test"
-      skip: true
-      func: (test, done)->
-        myAsyncFunction done((value)->
-          test.isNotNull(value)
-        )
-
-    },
-    {
-      name: "test with timeout"
-      type: "client"
-      timeout: 5000
-      func: (test)->
-        test.isTrue Meteor.isClient
     }
   ]
+};
 
-  tearDown: ->
-
-  suiteTearDown: ->
-
-Munit.run(new TestSuiteExample())
-
+Munit.run(tddTestSuite);
 ```
 
+## Sample Meteor App
 
-## Declaring Tests as an Object.
-Alternatively you can declare the `tests` as an object, for example:
-
-
-```coffeescript
-
-class TestSuiteExample
-	name: "TestSuiteExample"
-
-	tests:
-	  myTest1: (test) ->
-
-	  myTest2:
-	    skip: true
-	    func: (test) ->
-
-    'My Test named with a sentence': (test) ->
-
-
-```
-
-
-Sample Meteor App
--------
 Provided thanks to Michael Risse:
 
 https://github.com/rissem/meteor-munit-example/
 
-See the lib package munit tests here, including how to add your tests to your package.js:
+See the lib package munit tests there, including how to add your tests to your package.js:
 
 https://github.com/rissem/meteor-munit-example/tree/master/packages/lib
 
-Running your package tests in the browser with hot code reloads
-----------------
+## Running your package tests in the browser with hot code reloads
+
 Assuming you develop your package as part of a meteor app and the package is located
 in the packages folder, from the meteor app root, run:
 
@@ -381,35 +305,36 @@ in the packages folder, from the meteor app root, run:
 Then, just open your browser at the same url you use for your meteor app and the tests
 will start running automatically, including re-run on every code change.
 
-You can specify more than one package to test. Without arguments, it will test all packages in the packages folder, including the meteor and meteorite ones.
+You can specify more than one package to test. Without arguments, it will test all packages in the packages folder, including the core meteor ones.
 
 If you develop your package stand-alone, make sure meteor is in your path, and run:
 
 `meteor test-packages path-to-your-package`
 
+## Running your meteor app and your meteor package tests at the same time
 
-Running your meteor app and your meteor package tests at the same time
-----------------
 The way we work internally is to run our meteor app with a free [mongohq](http://www.mongohq.com/)  sandbox database and at the same time run all of our packages tests with the internal meteor mongodb on a different port:
 
 * app: `MONGO_URL=... meteor`
-* tests: `meteor --port 3100 test-packages our-packages`
+* tests: `unset MONGO_URL && export ROOT_URL=http://localhost:3100/ && meteor --port 3100 test-packages my-package1 my-package2`
 
-For our convenience, we created a couple of shell scripts that use environment variables that we set in our .bashrc to run the app and the tests. We recommend you do the same.
+For our convenience, we created a couple of shell scripts, one that runs the app and one that runs all our package tests, and that set / unset all the meteor related environment variables before hand. We recommend you do the same.
 
+## Internals
 
-Internals
-----------------
-The **Munit** test runner uses a slightly modified version of the `testAsyncMulti` function (with support for test timeouts) from the  test-helpers package shipped with meteor to run all the tests in the test suite including all the setup and `tearDown` functions, and therefore you will see the `setup` and `tearDown` functions as separate test cases in the test output.
+The **Munit** test runner uses a slightly modified version of the `testAsyncMulti` function (with support for test timeouts) from the test-helpers package shipped with meteor to run all the tests in the test suite including all the setup and `tearDown` functions.
 
-Contributions
-----------------
-Contributions are more than welcome. Just create pull requests. Some of the things we think may be valuable are:
+## Contributions
 
-* A file loader that automatically calls `Munit.run( testSuiteObject );`
-* A script that converts a meteor app into a meteor package, automatically creating the package.js file according to the meteor gathering order.
+Contributions are more than welcome. Here are some of our contributors:
 
+* Added support for BDD style describe.it semantics.
+* Added support for nested describe blocks.
 
-License
---------
-MIT
+## Changelog
+
+[CHANGELOG](https://github.com/spacejamio/meteor-munit/blob/master/CHANGELOG.md)
+
+## License
+
+[MIT](https://github.com/spacejamio/meteor-munit/blob/master/LICENSE.txt)

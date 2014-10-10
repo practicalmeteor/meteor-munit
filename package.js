@@ -28,6 +28,8 @@ Package.onUse(function (api, where) {
 
 Package.onTest(function(api) {
     api.use(["coffeescript", "spacejamio:munit"]);
+    api.addFiles("tests/TDDTest.js");
+    api.addFiles("tests/DescribeTest.js");
     api.addFiles("tests/TestRunnerTest.coffee");
     api.addFiles("tests/HelpersTest.coffee");
     api.addFiles("tests/DescribeTest.coffee");
