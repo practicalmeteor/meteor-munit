@@ -48,22 +48,36 @@ describe('suite1', function(){
 
 ## Asynchronous Tests
 
-To run a test asynchronously include a `done` callback, and invoke it upon completion:
+To run a test asynchronously, include a `waitFor` callback wrapper as an argument in your test function. When calling an async function, you need to wrap your callback with 'waitFor'. This will let MUnit know that a callback is pending and that the test will be done once the callback was called and has done it's thing.
 
 ```javascript
 
 describe('suite2', function(){
-  it('async test', function(done){
+  it('async test', function(waitFor){
     var onTimeout = function () {
-      done();
+      expect(true).to.be.true
     };
-    Meteor.setTimeout(onTimeout, 50);
+    Meteor.setTimeout(waitFor(onTimeout), 50);
   });
 });
 ```
 
-**NOTE**: The BDD interface supports async tests using a done function, similar to the way Mocha supports async tests. This differs from the way the MUnit TDD interface handle asynchronous tests.
+**NOTE**: Unfortunately, you cannot have more than one async function call per test. This is because MUnit uses testAsyncMulti from the meteor test-helpers core package to run your test's beforeEach, test, and afterEach as part of the same test. We hope to eliminate this limitation soon.
 
+### Nested Describes
+
+```javascript
+
+describe('top-level describe', function(){
+  describe('nested describe', function() {
+    describe('deep nested describe', function() {
+      it('a test', function () {
+        expect(true).to.be.true;
+      })
+    })
+  })
+});
+```
 
 ### Skipping Tests & Test Suites
 
@@ -82,7 +96,6 @@ describe('suite with skipped test', function(){
     expect(false).to.be.true;
   });
 });
-
 ```
 
 ### Server & Client Only Tests & Test Suites
@@ -126,7 +139,7 @@ describe.server('server only test suite', function(){
 
 ## TDD Interface
 
-The TDD interface defers from the BDD interface in that it allows you to specify timeouts per test as well as in it's asynchronous tests semantics.
+The TDD interface defers from the BDD interface in that it allows you to specify timeouts per test.
 
 Create a JavaScript object or CoffeeScript class, with the following properties:
 
@@ -150,7 +163,10 @@ Each test object in the `tests` array, can have the following properties:
 
 To run your test suite, just:
 
-`Munit.run( yourTestSuiteObject );`
+```javascript
+
+Munit.run( yourTestSuiteObject );
+```
 
 ### Synchronous Tests
 
@@ -211,7 +227,7 @@ myAsyncSuite = {
 Munit.run(myAsyncSuite);
 ```
 
-The `waitFor` argument is the `expect` function wrapper passed to a test by testAsyncMulti from the meteor test-helpers package. In your test, you need to wrap your async callback function with waitFor, so testAsyncMulti knows that the test became asynchronous and a callback is pending. Unfortunately, you cannot have more than one async function call per test, due to the way testAsyncMulti works.
+The `waitFor` argument is the `expect` function wrapper passed to a test by testAsyncMulti from the meteor test-helpers package. In your test, you need to wrap your async callback function with waitFor, so testAsyncMulti knows that the test became asynchronous and a callback is pending. Unfortunately, you cannot have more than one async function call per test, due to the way testAsyncMulti works. We hope to eliminate this limitation soon.
 
 ## Complete Example
 
@@ -324,12 +340,18 @@ For our convenience, we created a couple of shell scripts, one that runs the app
 
 The **Munit** test runner uses a slightly modified version of the `testAsyncMulti` function (with support for test timeouts) from the test-helpers package shipped with meteor to run all the tests in the test suite including all the setup and `tearDown` functions.
 
+## Known Issues
+
+* If a test fails, afterEach / tearDown will not be called. This is because MUnit uses testAsyncMulti behind the scenes, and this is a limitation of testAsyncMulti. We therefore recommend, as a workaround, to do cleanup in beforeEach / setup too.
+
+* If the last test in a test suite fails, afterAll, suiteTearDown will not be called, for the same reason as above. We therefore recommend, as a workaround, to do cleanup in beforeAll / suiteSetup too.
+
 ## Contributions
 
 Contributions are more than welcome. Here are some of our contributors:
 
-* Added support for BDD style describe.it semantics.
-* Added support for nested describe blocks.
+* @philcockfield - added support for BDD style describe.it semantics.
+* @DominikGuzei - added support for nested describe blocks.
 
 ## Changelog
 
