@@ -62,7 +62,7 @@ describe 'Running tests from within a "describe" block', ->
   it 'passes the [TestCaseResults] as [this]', ->
     expect(@test.test_case.shortName).to.equal 'passes the [TestCaseResults] as [this]'
     expect(@func).to.be.an.instanceOf Function
-    expect(@callback).to.be.an.instanceOf Function
+    expect(@waitFor).to.be.an.instanceOf Function
     expect(@suite.name).to.equal 'Running tests from within a "describe" block'
 
   it 'runs [beforeAll]', ->
@@ -110,16 +110,10 @@ describe 'Asynchronous tests within an "it" block', ->
   it 'is not asynchronous', ->
     expect(@isAsync).to.equal false
 
-  it 'is asynchronous', (done) ->
-    onTimeout = => done()
-    Meteor.setTimeout (-> onTimeout()), 50
-
-  it 'runs finalization within the "try" helper', ->
-    onTimeout = =>
-      @try ->
-        done()
-    Meteor.setTimeout (-> onTimeout()), 50
-
+  it 'is asynchronous', (waitFor) ->
+    onTimeout = ->
+      expect(true).to.be.true
+    Meteor.setTimeout waitFor(onTimeout), 50
 
 
 
