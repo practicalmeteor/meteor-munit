@@ -25,11 +25,11 @@ describe('suite1', function(){
 });
 
 describe('suite2', function(){
-  it('async test', function(done){
+  it('async test', function(waitFor){
     var onTimeout = function () {
-      done();
+      expect(true).to.be.true
     };
-    Meteor.setTimeout(onTimeout, 50);
+    Meteor.setTimeout(waitFor(onTimeout), 50);
   });
 });
 
@@ -71,4 +71,14 @@ describe.server('server only test suite', function(){
   it.client('overrides describe.server and runs only in client', function(){
     expect(Meteor.isClient).to.be.true;
   });
+});
+
+describe('top-level describe', function(){
+  describe('nested describe', function() {
+    describe('deep nested describe', function() {
+      it('a test', function () {
+        expect(true).to.be.true;
+      })
+    })
+  })
 });
