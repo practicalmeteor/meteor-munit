@@ -46,7 +46,7 @@ describe('suite1', function(){
 });
 ```
 
-## Asynchronous Tests
+### Asynchronous Tests
 
 To run a test asynchronously, include a `waitFor` callback wrapper as an argument in your test function. When calling an async function, you need to wrap your callback with 'waitFor'. This will let MUnit know that a callback is pending and that the test will be done once the callback was called and has done it's thing.
 
@@ -229,7 +229,7 @@ Munit.run(myAsyncSuite);
 
 The `waitFor` argument is the `expect` function wrapper passed to a test by testAsyncMulti from the meteor test-helpers package. In your test, you need to wrap your async callback function with waitFor, so testAsyncMulti knows that the test became asynchronous and a callback is pending. Unfortunately, you cannot have more than one async function call per test, due to the way testAsyncMulti works. We hope to eliminate this limitation soon.
 
-## Complete Example
+### Complete Example
 
 ```javascript
 
