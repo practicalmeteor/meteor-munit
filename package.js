@@ -6,7 +6,7 @@ Package.describe({
 });
 
 Package.onUse(function (api, where) {
-  api.versionsFrom('0.9.0');
+  api.versionsFrom('0.9.3');
 
   api.use(["coffeescript", "underscore"]);
   api.use(["tinytest","test-helpers"]);
@@ -27,7 +27,7 @@ Package.onUse(function (api, where) {
 });
 
 Package.onTest(function(api) {
-    api.use(["coffeescript", "spacejamio:munit"]);
+    api.use(["coffeescript", "spacejamio:munit@2.0.0"]);
     api.addFiles("tests/TDDTest.js");
     api.addFiles("tests/DescribeTest.js");
     api.addFiles("tests/TestRunnerTest.coffee");
