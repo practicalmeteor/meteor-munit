@@ -350,8 +350,8 @@ The **Munit** test runner uses a slightly modified version of the `testAsyncMult
 
 Contributions are more than welcome. Here are some of our contributors:
 
-* @philcockfield - added support for BDD style describe.it semantics.
-* @DominikGuzei - added support for nested describe blocks.
+* [@philcockfield](https://github.com/philcockfield) - added support for BDD style describe.it semantics.
+* [@DominikGuzei](https://github.com/DominikGuzei) - added support for nested describe blocks.
 
 ## Changelog
 
