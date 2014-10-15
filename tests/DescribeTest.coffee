@@ -34,12 +34,6 @@ describeSuiteTest =
                 afterAll(func)
       test.instanceOf(suite.suiteTearDown, Function)
 
-    'allows nesting of describe blocks': (test) ->
-      
-      suite = describe 'parent', -> describe 'child', -> describe 'grand child', ->
-
-      test.equal(suite.nestedPrefix, 'child - grand child - ')
-
 
 
 try
@@ -102,6 +96,15 @@ describe 'Running tests from within nested describe blocks', ->
         expect(@test.test_case.shortName).to.equal "can handle any depth of nesting"
         expect(@test.test_case.name).to.equal "#{@suite.name} - when nesting - multi nesting - #{@test.test_case.shortName}"
         expect(@suite.shared).to.equal sharedData
+
+  describe 'multiple nested on same level', ->
+
+    it 'it shows up in the right order', ->
+
+      expect(@suite.name).to.equal 'Running tests from within nested describe blocks'
+      expect(@test.test_case.shortName).to.equal "it shows up in the right order"
+      expect(@test.test_case.name).to.equal "#{@suite.name} - multiple nested on same level - #{@test.test_case.shortName}"
+      expect(@suite.shared).to.equal sharedData
 
 # --------------------------------------------------------------------------
 

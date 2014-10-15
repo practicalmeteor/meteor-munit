@@ -22,21 +22,25 @@ Declares a suite of tests.  For example:
 describe = (text, func, options = {}) ->
   # Setup initial conditions.
   return unless _.isFunction(func)
-  
+
   if _suite?
     # we are nesting describe blocks -> add to nested prefix
-    _suite.nestedPrefix += "#{text} - "
-  
+    _suite.nestedSuites.push text
+
   else
     # Build the set of tests within the suite.
     _suite = suite =
       name: text
       tests: {}
       hasRun: false
-      nestedPrefix: ''
+      nestedSuites: []
 
   func()
-  _suite = null
+
+  if _suite.nestedSuites.length <= 0
+    _suite = null
+  else
+    _suite.nestedSuites.pop()
 
   # Adjust the execution domain.
   if type = options.type
@@ -44,13 +48,13 @@ describe = (text, func, options = {}) ->
       test.type ?= type
 
   if suite?
-  
+
     # Run the tests only once
     if describe.autoRun is true and !suite.hasRun
 
       Munit.run(suite)
       suite.hasRun =  true
-  
+
   suite
 
 
@@ -108,7 +112,9 @@ Declares a unit test.
 it = (text, func) ->
   if _suite? and _.isFunction(func)
     func = wrap(func)
-    _suite.tests[_suite.nestedPrefix + text] = { func:func }
+
+    testPath = _suite.nestedSuites.concat([text]).join ' - '
+    _suite.tests[testPath] = { func:func }
 
 
 ###
