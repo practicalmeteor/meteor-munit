@@ -20,42 +20,45 @@ Declares a suite of tests.  For example:
           type:   Optional. Execution domain: 'client', 'server'
 ###
 describe = (text, func, options = {}) ->
+
   # Setup initial conditions.
   return unless _.isFunction(func)
 
-  if _suite?
-    # we are nesting describe blocks -> add to nested prefix
-    _suite.nestedSuites.push text
+  if not _suite?
 
-  else
-    # Build the set of tests within the suite.
+    # Setup a fresh suite
     _suite = suite =
       name: text
       tests: {}
-      hasRun: false
       nestedSuites: []
+
+  else
+    # We are nesting describe blocks -> push sub-suite to stack
+    _suite.nestedSuites.push text
 
   func()
 
-  if _suite.nestedSuites.length <= 0
+  isRootSuite = _suite.nestedSuites.length <= 0
+
+  if isRootSuite
+
+    # reset root suite after nesting has been setup
     _suite = null
-  else
-    _suite.nestedSuites.pop()
 
-  # Adjust the execution domain.
-  if type = options.type
-    for key, test of suite.tests
-      test.type ?= type
+    if describe.autoRun is true
 
-  if suite?
-
-    # Run the tests only once
-    if describe.autoRun is true and !suite.hasRun
+      # Adjust the execution domain.
+      if type = options.type
+        for key, test of suite.tests
+          test.type ?= type
 
       Munit.run(suite)
-      suite.hasRun =  true
 
-  suite
+  else
+    # we still are inside a nested suite -> pop from stack
+    _suite.nestedSuites.pop()
+
+  return suite
 
 
 
