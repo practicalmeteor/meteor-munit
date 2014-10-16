@@ -68,16 +68,21 @@ describe 'Running tests from within a "describe" block', ->
 
 describe 'Running tests from within nested describe blocks', ->
 
-  sharedData = {}
+  ranBefore = false
 
-  beforeEach -> @suite.shared = sharedData
+  beforeEach ->
+    ranBefore = true
+    console.log "[BEFORE EACH] #{@test.test_case.name}"
+
+  afterEach ->
+    console.log "[AFTER EACH] #{@test.test_case.name}"
 
   it 'runs the first-level tests correctly', ->
 
     expect(@suite.name).to.equal 'Running tests from within nested describe blocks'
     expect(@test.test_case.shortName).to.equal "runs the first-level tests correctly"
     expect(@test.test_case.name).to.equal "#{@suite.name} - #{@test.test_case.shortName}"
-    expect(@suite.shared).to.equal sharedData
+    expect(ranBefore).to.be.true
 
   describe 'when nesting', ->
 
@@ -86,7 +91,7 @@ describe 'Running tests from within nested describe blocks', ->
       expect(@suite.name).to.equal 'Running tests from within nested describe blocks'
       expect(@test.test_case.shortName).to.equal "adds dashes to generate tinytest group paths"
       expect(@test.test_case.name).to.equal "#{@suite.name} - when nesting - #{@test.test_case.shortName}"
-      expect(@suite.shared).to.equal sharedData
+      expect(ranBefore).to.be.true
 
     it 'runs nested in both environments', ->
 
@@ -97,7 +102,7 @@ describe 'Running tests from within nested describe blocks', ->
         expect(@suite.name).to.equal 'Running tests from within nested describe blocks'
         expect(@test.test_case.shortName).to.equal "can handle any depth of nesting"
         expect(@test.test_case.name).to.equal "#{@suite.name} - when nesting - server only - #{@test.test_case.shortName}"
-        expect(@suite.shared).to.equal sharedData
+        expect(ranBefore).to.be.true
 
   describe.client 'multiple nested on same level', ->
 
@@ -106,14 +111,14 @@ describe 'Running tests from within nested describe blocks', ->
       expect(@suite.name).to.equal 'Running tests from within nested describe blocks'
       expect(@test.test_case.shortName).to.equal "it shows up in the right order"
       expect(@test.test_case.name).to.equal "#{@suite.name} - multiple nested on same level - #{@test.test_case.shortName}"
-      expect(@suite.shared).to.equal sharedData
+      expect(ranBefore).to.be.true
 
   it.server 'also works after describe blocks', ->
 
     expect(@suite.name).to.equal 'Running tests from within nested describe blocks'
     expect(@test.test_case.shortName).to.equal "also works after describe blocks"
     expect(@test.test_case.name).to.equal "#{@suite.name} - #{@test.test_case.shortName}"
-    expect(@suite.shared).to.equal sharedData
+    expect(ranBefore).to.be.true
 
 # --------------------------------------------------------------------------
 
