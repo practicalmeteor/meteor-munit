@@ -31,10 +31,14 @@ describe = (text, func, options = {}) ->
       name: text
       tests: {}
       nestedSuites: []
+      options: options
 
   else
     # We are nesting describe blocks -> push sub-suite to stack
-    _suite.nestedSuites.push text
+    _suite.nestedSuites.push {
+      name: text
+      options: options
+    }
 
   func()
 
@@ -46,11 +50,6 @@ describe = (text, func, options = {}) ->
     _suite = null
 
     if describe.autoRun is true
-
-      # Adjust the execution domain.
-      if type = options.type
-        for key, test of suite.tests
-          test.type ?= type
 
       Munit.run(suite)
 
@@ -116,8 +115,15 @@ it = (text, func) ->
   if _suite? and _.isFunction(func)
     func = wrap(func)
 
-    testPath = _suite.nestedSuites.concat([text]).join ' - '
-    _suite.tests[testPath] = { func:func }
+    parentSuite = _.last(_suite.nestedSuites) || _suite
+    name = _.map(_suite.nestedSuites, (suite) -> suite.name).concat([text]).join ' - '
+
+    test = { func: func }
+
+    if parentSuite? and parentSuite.options.type?
+      test.type = parentSuite.options.type
+
+    _suite.tests[name] = test
 
 
 ###

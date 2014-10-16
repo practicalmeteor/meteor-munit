@@ -81,23 +81,25 @@ describe 'Running tests from within nested describe blocks', ->
 
   describe 'when nesting', ->
 
-    it 'adds dashes to generate tinytest group paths', ->
+    it.client 'adds dashes to generate tinytest group paths', ->
 
       expect(@suite.name).to.equal 'Running tests from within nested describe blocks'
       expect(@test.test_case.shortName).to.equal "adds dashes to generate tinytest group paths"
       expect(@test.test_case.name).to.equal "#{@suite.name} - when nesting - #{@test.test_case.shortName}"
       expect(@suite.shared).to.equal sharedData
 
-    describe 'multi nesting', ->
+    it 'runs nested in both environments', ->
+
+    describe.server 'server only', ->
 
       it 'can handle any depth of nesting', ->
 
         expect(@suite.name).to.equal 'Running tests from within nested describe blocks'
         expect(@test.test_case.shortName).to.equal "can handle any depth of nesting"
-        expect(@test.test_case.name).to.equal "#{@suite.name} - when nesting - multi nesting - #{@test.test_case.shortName}"
+        expect(@test.test_case.name).to.equal "#{@suite.name} - when nesting - server only - #{@test.test_case.shortName}"
         expect(@suite.shared).to.equal sharedData
 
-  describe 'multiple nested on same level', ->
+  describe.client 'multiple nested on same level', ->
 
     it 'it shows up in the right order', ->
 
@@ -106,7 +108,7 @@ describe 'Running tests from within nested describe blocks', ->
       expect(@test.test_case.name).to.equal "#{@suite.name} - multiple nested on same level - #{@test.test_case.shortName}"
       expect(@suite.shared).to.equal sharedData
 
-  it 'also works after describe blocks', ->
+  it.server 'also works after describe blocks', ->
 
     expect(@suite.name).to.equal 'Running tests from within nested describe blocks'
     expect(@test.test_case.shortName).to.equal "also works after describe blocks"
