@@ -47,11 +47,17 @@ catch err
 
 
 describe 'Running tests from within a "describe" block', ->
-  wasBeforeAllRun = null
-  beforeEachContext = null
 
-  beforeAll -> wasBeforeAllRun = true
-  beforeEach -> beforeEachContext = @
+  beforeEachContext = null
+  beforeAllContext = null
+
+  beforeAll ->
+    beforeAllContext = this
+    @wasBeforeAllRun = true
+
+  beforeEach ->
+    beforeEachContext = this
+    @wasBeforeEachRun = true
 
   it 'passes the [TestCaseResults] as [this]', ->
     expect(@test.test_case.shortName).to.equal 'passes the [TestCaseResults] as [this]'
@@ -60,10 +66,15 @@ describe 'Running tests from within a "describe" block', ->
     expect(@suite.name).to.equal 'Running tests from within a "describe" block'
 
   it 'runs [beforeAll]', ->
-    expect(wasBeforeAllRun).to.be.true
+    expect(beforeAllContext).to.equal this
+    expect(@wasBeforeAllRun).to.be.true
 
   it 'runs [beforeEach]', ->
     expect(beforeEachContext.test.test_case.shortName).to.equal 'runs [beforeEach]'
+
+  it 'shares the test context with before hooks', ->
+    expect(beforeEachContext).to.equal this
+    expect(@wasBeforeEachRun).to.be.true
 
 
 describe 'Running tests from within nested describe blocks', ->

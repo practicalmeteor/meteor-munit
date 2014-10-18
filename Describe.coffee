@@ -197,23 +197,23 @@ afterAll = (func) -> _suite?.suiteTearDown = wrap(func) if _.isFunction(func)
 
 
 wrap = (func) ->
+
   suite   = _suite
   params  = getParamNames(func)
   isAsync = params.length > 0
 
   (test, waitFor) ->
-      self =
-        suite:    suite
-        test:     test
-        waitFor:  waitFor
-        func:     func
-        isAsync:  isAsync
+
+      suite.suite    = suite
+      suite.test     = test
+      suite.waitFor  = waitFor
+      suite.func     = func
+      suite.isAsync  = isAsync
 
       if isAsync
-        func.call(self, waitFor)
-
+        func.call suite, waitFor
       else
-        func.call(self)
+        func.call suite
 
 
 # See: http://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically-from-javascript
