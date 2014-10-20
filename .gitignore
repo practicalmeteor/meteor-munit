@@ -1,4 +1,2 @@
+versions.json
 .build*
-.idea/
-smart.lock
-/packages/
