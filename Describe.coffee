@@ -20,38 +20,44 @@ Declares a suite of tests.  For example:
           type:   Optional. Execution domain: 'client', 'server'
 ###
 describe = (text, func, options = {}) ->
+
   # Setup initial conditions.
   return unless _.isFunction(func)
-  
-  if _suite?
-    # we are nesting describe blocks -> add to nested prefix
-    _suite.nestedPrefix += "#{text} - "
-  
-  else
-    # Build the set of tests within the suite.
+
+  if not _suite?
+
+    # Setup a fresh suite
     _suite = suite =
       name: text
       tests: {}
-      hasRun: false
-      nestedPrefix: ''
+      nestedSuites: []
+      options: options
+
+  else
+    # We are nesting describe blocks -> push sub-suite to stack
+    _suite.nestedSuites.push {
+      name: text
+      options: options
+    }
 
   func()
-  _suite = null
 
-  # Adjust the execution domain.
-  if type = options.type
-    for key, test of suite.tests
-      test.type ?= type
+  isRootSuite = _suite.nestedSuites.length <= 0
 
-  if suite?
-  
-    # Run the tests only once
-    if describe.autoRun is true and !suite.hasRun
+  if isRootSuite
+
+    # reset root suite after nesting has been setup
+    _suite = null
+
+    if describe.autoRun is true
 
       Munit.run(suite)
-      suite.hasRun =  true
-  
-  suite
+
+  else
+    # we still are inside a nested suite -> pop from stack
+    _suite.nestedSuites.pop()
+
+  return suite
 
 
 
@@ -108,7 +114,16 @@ Declares a unit test.
 it = (text, func) ->
   if _suite? and _.isFunction(func)
     func = wrap(func)
-    _suite.tests[_suite.nestedPrefix + text] = { func:func }
+
+    parentSuite = _.last(_suite.nestedSuites) || _suite
+    name = _.map(_suite.nestedSuites, (suite) -> suite.name).concat([text]).join ' - '
+
+    test = { func: func }
+
+    if parentSuite? and parentSuite.options.type?
+      test.type = parentSuite.options.type
+
+    _suite.tests[name] = test
 
 
 ###
@@ -182,23 +197,23 @@ afterAll = (func) -> _suite?.suiteTearDown = wrap(func) if _.isFunction(func)
 
 
 wrap = (func) ->
+
   suite   = _suite
   params  = getParamNames(func)
   isAsync = params.length > 0
 
   (test, waitFor) ->
-      self =
-        suite:    suite
-        test:     test
-        waitFor:  waitFor
-        func:     func
-        isAsync:  isAsync
+
+      suite.suite    = suite
+      suite.test     = test
+      suite.waitFor  = waitFor
+      suite.func     = func
+      suite.isAsync  = isAsync
 
       if isAsync
-        func.call(self, waitFor)
-
+        func.call suite, waitFor
       else
-        func.call(self)
+        func.call suite
 
 
 # See: http://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically-from-javascript
