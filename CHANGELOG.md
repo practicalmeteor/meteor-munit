@@ -1,3 +1,11 @@
+## 2.0.2
+
+* Fix nested describes issues.
+
+## 2.0.1
+
+* Fix spacejamio:chai settings bug.
+
 ## 2.0.0
 
 * Update README to fix documentation bug regarding async tests, where usage description was incorrect.
