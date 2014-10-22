@@ -200,7 +200,7 @@ wrap = (func) ->
 
   suite   = _suite
   params  = getParamNames(func)
-  isAsync = params.length > 0
+  isAsync = params.length > 1
 
   (test, waitFor) ->
 
@@ -211,9 +211,9 @@ wrap = (func) ->
       suite.isAsync  = isAsync
 
       if isAsync
-        func.call suite, waitFor
+        func.call suite, test, waitFor
       else
-        func.call suite
+        func.call suite, test
 
 
 # See: http://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically-from-javascript

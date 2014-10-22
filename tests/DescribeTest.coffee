@@ -138,11 +138,62 @@ describe 'Asynchronous tests within an "it" block', ->
   it 'is not asynchronous', ->
     expect(@isAsync).to.equal false
 
-  it 'is asynchronous', (waitFor) ->
+  it 'is asynchronous', (test, waitFor) ->
+    expect(@isAsync).to.equal true
     onTimeout = ->
-      expect(true).to.be.true
+      try
+        expect(true).to.be.true
+      catch err
+        test.exception(err)
     Meteor.setTimeout waitFor(onTimeout), 50
 
+
+describe 'Asynchronous beforeAll, beforeEach, afterEach and afterAll', ->
+
+  beforeAll (test, waitFor) ->
+    expect(@isAsync).to.equal true
+    onTimeout = ->
+      try
+        expect(true).to.be.true
+      catch err
+        test.exception(err)
+    Meteor.setTimeout waitFor(onTimeout), 50
+
+  beforeEach (test, waitFor) ->
+    expect(@isAsync).to.equal true
+    onTimeout = ->
+      try
+        expect(true).to.be.true
+      catch err
+        test.exception(err)
+    Meteor.setTimeout waitFor(onTimeout), 50
+
+  it 'is asynchronous too', (test, waitFor) ->
+    expect(@isAsync).to.equal true
+    onTimeout = ->
+      try
+        expect(true).to.be.true
+      catch err
+        test.exception(err)
+    Meteor.setTimeout waitFor(onTimeout), 50
+
+  afterEach (test, waitFor) ->
+    expect(@isAsync).to.equal true
+    onTimeout = ->
+      try
+        expect(true).to.be.true
+      catch err
+        test.exception(err)
+    Meteor.setTimeout waitFor(onTimeout), 50
+
+  afterAll (test, waitFor) ->
+    expect(@isAsync).to.equal true
+    onTimeout = ->
+      try
+        expect(true).to.be.true
+      catch err
+        test.exception(err)
+    Meteor.setTimeout waitFor(onTimeout), 50
 
 
 # --------------------------------------------------------------------------

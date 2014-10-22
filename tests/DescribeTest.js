@@ -25,9 +25,13 @@ describe('suite1', function(){
 });
 
 describe('suite2', function(){
-  it('async test', function(waitFor){
+  it('async test', function(test, waitFor){
     var onTimeout = function () {
-      expect(true).to.be.true
+      try {
+        expect(true).to.be.true;
+      } catch(err) {
+        test.exception(err);
+      }
     };
     Meteor.setTimeout(waitFor(onTimeout), 50);
   });
