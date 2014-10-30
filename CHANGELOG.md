@@ -1,3 +1,11 @@
+## 2.1.1
+
+* Fix documentation and update changelog.
+
+## 2.1.0
+
+* Fix async describe tests to enable reporting of exceptions in async callbacks.
+
 ## 2.0.2
 
 * Fix nested describes issues.

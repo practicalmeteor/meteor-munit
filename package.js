@@ -1,7 +1,7 @@
 Package.describe({
     summary: "Meteor unit testing framework for packages",
     name: "spacejamio:munit",
-    version: "2.1.0",
+    version: "2.1.1",
     git: "https://github.com/spacejamio/meteor-munit.git"
 });
 

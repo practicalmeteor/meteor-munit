@@ -96,7 +96,7 @@ describe('suite2', function(){
 
 1. As in any testing framework, you must enclose your async callback code in a try catch block, and report any exceptions to the framework, otherwise the framework has no way of knowing that exceptions occurred in async code. In the case of munit and tinytest, you report those exceptions using test.exception, as seen above.
 
-2. Unfortunately, you cannot have more than one async function call per test function. This is a limitation of the testAsyncMulti function from the meteor test-helpers core package that MUnit uses to run your test's beforeEach, test, and afterEach as part of the same test. We hope to eliminate this limitation soon.
+2. Unfortunately, you cannot have more than one async function call per test. This is a limitation of the testAsyncMulti function from the meteor test-helpers core package that MUnit uses to run your test's beforeEach, test, and afterEach as part of the same test. We hope to eliminate this limitation soon.
 
 3. beforeAll, beforeEach, afterAll, and afterEach can also be asynchronous, using the same test and waitFor arguments.
 
