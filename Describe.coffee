@@ -213,8 +213,6 @@ https://github.com/spacejamio/meteor-munit
 wrap = (func) ->
   suite   = _suite
   params  = getParamNames(func)
-  console.log "params=#{JSON.stringify(params, 2, null)}"
-  console.log "params is array=#{params instanceof Array}"
   isAsync = params.length > 1
   badParams = ((params.length > 0) and (params[0] isnt 'test'))
 
@@ -226,7 +224,6 @@ wrap = (func) ->
       suite.func     = func
       suite.isAsync  = isAsync
 
-      console.log "badParams=#{badParams}"
       if badParams
         throw new Error(badParamsErrorMsg)
       else if isAsync
@@ -244,4 +241,3 @@ getParamNames = (func) ->
   result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).match(ARGUMENT_NAMES)
   result = [] if result is null
   result
-
