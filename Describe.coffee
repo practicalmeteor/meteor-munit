@@ -1,6 +1,6 @@
 _suite = null
 
-
+#displayedAsyncTestsMessage = false
 # runIfRequired = (suite, options = {}) ->
 #   options.run ?= true
 #   Munit.run(suite) if describe.autoRun is true and options.run is true
@@ -20,6 +20,12 @@ Declares a suite of tests.  For example:
           type:   Optional. Execution domain: 'client', 'server'
 ###
 describe = (text, func, options = {}) ->
+#  if not displayedAsyncTestsMessage
+#    log.warn """
+#  spacejamio:munit: The interface for async tests in describe has changed in v2.1.0.\n
+#  Please visit https://github.com/spacejamio/meteor-munit for more info.
+#    """
+#    displayedAsyncTestsMessage = true
 
   # Setup initial conditions.
   return unless _.isFunction(func)
@@ -79,7 +85,7 @@ describe.skip = (text, func) ->
   # No-op.
   # Report that the suite is being skipped, and to not
   # pass it in.
-  console.log "SKIPPING SUITE: #{ text }"
+  log.debug "Skipping test suite '#{ text }'"
 
 
 
@@ -131,7 +137,7 @@ Declares a unit test to be skipped.
 ###
 it.skip = (text, func) ->
   if _suite?
-    console.log "SKIPPING SUITE: #{ _suite.name } >> TEST: #{ text }"
+    log.debug "Skipping test '#{ text }' in test suite '#{ _suite.name }'"
 
 
 ###
@@ -195,12 +201,22 @@ afterAll = (func) -> _suite?.suiteTearDown = wrap(func) if _.isFunction(func)
 
 # PRIVATE --------------------------------------------------------------------------
 
+badParamsErrorMsg = """
+spacejamio:munit: Error: The interface for async tests has changed.\n
+Please use '(test, waitFor)' as function arguments,\n
+use waitFor as your callback function wrapper,
+enclose all your callback function code in try catch blocks and report exceptions with test.exception.\n
+For additional information, please visit the spacejamio:munit documentation at:\n
+https://github.com/spacejamio/meteor-munit
+"""
 
 wrap = (func) ->
-
   suite   = _suite
   params  = getParamNames(func)
+  console.log "params=#{JSON.stringify(params, 2, null)}"
+  console.log "params is array=#{params instanceof Array}"
   isAsync = params.length > 1
+  badParams = ((params.length > 0) and (params[0] isnt 'test'))
 
   (test, waitFor) ->
 
@@ -210,7 +226,10 @@ wrap = (func) ->
       suite.func     = func
       suite.isAsync  = isAsync
 
-      if isAsync
+      console.log "badParams=#{badParams}"
+      if badParams
+        throw new Error(badParamsErrorMsg)
+      else if isAsync
         func.call suite, test, waitFor
       else
         func.call suite, test

@@ -20,49 +20,85 @@ MUnit allows you to use `describe` and `it` declaration blocks to declare tests:
 ```javascript
 
 describe('suite1', function(){
-  beforeAll(function (){
+  beforeAll(function (test){
     // Let's do 'cleanup' beforeEach too, in case another suite didn't clean up properly
     spies.restoreAll();
     stubs.restoreAll();
     console.log("I'm beforeAll");
   });
-  beforeEach(function (){
+  beforeEach(function (test){
     console.log("I'm beforeEach");
     spies.create('log', console, 'log');
   });
-  afterEach(function (){
+  afterEach(function (test){
     spies.restoreAll();
     console.log("I'm afterEach");
   });
-  afterAll(function (){
+  afterAll(function (test){
     console.log("I'm afterAll");
     spies.restoreAll();
     stubs.restoreAll();
   });
-  it('test1', function(){
+  it('test1', function(test){
     console.log('Hello world');
     expect(spies.log).to.have.been.calledWith('Hello world');
   })
 });
 ```
 
+### The test argument
+
+The `test` argument is the same test object passed to a test function by `Tinytest.add`, and has the following methods:
+
+* `equal(actual, expected, msg)`
+* `notEqual(actual, expected, msg)`
+* `instanceOf(obj, klass)`
+* `matches(actual, regexp, msg)`
+* `throws(func, expected)`
+* `isTrue(value, msg)`
+* `isFalse(value, msg)`
+* `isNull(value, msg)`
+* `isNotNull(value, msg)`
+* `isUndefined(value, msg)`
+* `isNaN(value, msg)`
+* `include(object, key)`
+* `include(string, substring)`
+* `include(array, value)`
+* `length(obj, expected_length, msg)`
+
+The `msg` property is a custom error message for the assertion.
+
+You can use either the test object for your assertions or the included spacejamio:chai library.
+
+You can see the source code [here](https://github.com/meteor/meteor/blob/devel/packages/tinytest/tinytest.js).
+
 ### Asynchronous Tests
 
-To run a test asynchronously, include a `waitFor` callback wrapper as an argument in your test function. When calling an async function, you need to wrap your callback with 'waitFor'. This will let MUnit know that a callback is pending and that the test will be done once the callback was called and has done it's thing.
+To run a test asynchronously, add a `waitFor` callback wrapper as an argument to your test function. When calling an async function, you need to wrap your callback with 'waitFor'. This will let MUnit know that a callback is pending and that the test will be done once the callback was called and has done it's thing.
 
 ```javascript
 
 describe('suite2', function(){
-  it('async test', function(waitFor){
+  it('async test', function(test, waitFor){
     var onTimeout = function () {
-      expect(true).to.be.true
+      try {
+        expect(true).to.be.true;
+      } catch(err) {
+        test.exception(err);
+      }
     };
     Meteor.setTimeout(waitFor(onTimeout), 50);
   });
 });
 ```
 
-**NOTE**: Unfortunately, you cannot have more than one async function call per test. This is because MUnit uses testAsyncMulti from the meteor test-helpers core package to run your test's beforeEach, test, and afterEach as part of the same test. We hope to eliminate this limitation soon.
+#### **IMPORTANT NOTES**
+
+1. As in any testing framework, you must enclose your async callback code in a try catch block, and report any exceptions to the framework, otherwise the framework has no way of knowing that exceptions occurred in async code. In the case of munit and tinytest, you report those exceptions using test.exception, as seen above.
+
+2. Unfortunately, you cannot have more than one async function call per test function. This is a limitation of the testAsyncMulti function from the meteor test-helpers core package that MUnit uses to run your test's beforeEach, test, and afterEach as part of the same test. We hope to eliminate this limitation soon.
+
+3. beforeAll, beforeEach, afterAll, and afterEach can also be asynchronous, using the same test and waitFor arguments.
 
 ### Nested Describes
 
@@ -180,32 +216,6 @@ mySyncSuite = {
 
 Munit.run(mySuite);
 ```
-
-### The test argument
-
-The `test` argument is the same test object passed to a test function by `Tinytest.add`, and has the following methods:
-
-* `equal(actual, expected, msg)`
-* `notEqual(actual, expected, msg)`
-* `instanceOf(obj, klass)`
-* `matches(actual, regexp, msg)`
-* `throws(func, expected)`
-* `isTrue(value, msg)`
-* `isFalse(value, msg)`
-* `isNull(value, msg)`
-* `isNotNull(value, msg)`
-* `isUndefined(value, msg)`
-* `isNaN(value, msg)`
-* `include(object, key)`
-* `include(string, substring)`
-* `include(array, value)`
-* `length(obj, expected_length, msg)`
-
-The `msg` property is a custom error message for the assertion.
-
-You can use either the test object for your assertions or the included spacejamio:chai library.
-
-You can see the source code [here](https://github.com/meteor/meteor/blob/devel/packages/tinytest/tinytest.js).
 
 ### Asynchronous Tests
 

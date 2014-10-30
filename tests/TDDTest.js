@@ -31,21 +31,21 @@ tddTestSuite = {
     // Let's do 'cleanup' in suiteSetup too, in case another suite didn't clean up properly
     spies.restoreAll();
     stubs.restoreAll();
-    console.log("I'm suiteSetup");
+    log.info("I'm suiteSetup");
   },
 
   setup: function () {
-    console.log("I'm setup");
+    log.info("I'm setup");
     spies.create('log', console, 'log');
   },
 
   tearDown: function () {
     spies.restoreAll();
-    console.log("I'm tearDown");
+    log.info("I'm tearDown");
   },
 
   suiteTearDown: function () {
-    console.log("I'm suiteTearDown");
+    log.info("I'm suiteTearDown");
     spies.restoreAll();
     stubs.restoreAll();
   },

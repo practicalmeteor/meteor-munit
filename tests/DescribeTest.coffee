@@ -39,7 +39,7 @@ describeSuiteTest =
 try
   Munit.run(describeSuiteTest)
 catch err
-  console.error(err.stack)
+  log.error(err.stack)
 
 
 
@@ -83,10 +83,10 @@ describe 'Running tests from within nested describe blocks', ->
 
   beforeEach ->
     ranBefore = true
-    console.log "[BEFORE EACH] #{@test.test_case.name}"
+    log.info "[BEFORE EACH] #{@test.test_case.name}"
 
   afterEach ->
-    console.log "[AFTER EACH] #{@test.test_case.name}"
+    log.info "[AFTER EACH] #{@test.test_case.name}"
 
   it 'runs the first-level tests correctly', ->
 
@@ -265,5 +265,3 @@ describe.client.skip 'Skipping "describe.client"', ->
 describe.server.skip 'Skipping "describe.server"', ->
   it 'should fail', ->
     throw new Error('This should not run')
-
-
