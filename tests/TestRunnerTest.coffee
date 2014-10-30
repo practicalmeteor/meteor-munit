@@ -4,7 +4,7 @@ class SyncSuiteSetupTest
   @isValid:true
 
   suiteSetup:(test)=>
-    console.log("SyncSuiteSetupTest.suiteSetup")
+    log.info("SyncSuiteSetupTest.suiteSetup")
     test.isTrue true
     @isValid = false
 
@@ -15,7 +15,7 @@ class SyncSuiteSetupTest
 try
   Munit.run(new SyncSuiteSetupTest())
 catch err
-  console.error(err.stack)
+  log.error(err.stack)
 
 withLatency = (time,cb)->
   Meteor.setTimeout(->
@@ -36,7 +36,7 @@ class AsyncSuiteSetupTest
   @isValid:true
 
   suiteSetup:(test,onComplete)=>
-    console.log("AsyncSuiteSetupTest.suiteSetup")
+    log.info("AsyncSuiteSetupTest.suiteSetup")
     x = "a"
     withLatency 500, onComplete =>
       @isValid = false
@@ -50,7 +50,7 @@ class AsyncSuiteSetupTest
 try
   Munit.run(new AsyncSuiteSetupTest())
 catch err
-  console.error(err.stack)
+  log.error(err.stack)
 
 
 
@@ -59,7 +59,7 @@ class SyncSuiteTearDownTest
   isValid:true
 
   suiteSetup:(test)=>
-    console.log("SyncSuiteTearDownTest.suiteSetup")
+    log.info("SyncSuiteTearDownTest.suiteSetup")
     test.isTrue @isValid
     @changeIsValidValue()
 
@@ -73,7 +73,7 @@ class SyncSuiteTearDownTest
       @isValid = true
 
   suiteTearDown:(test)=>
-    console.log("SyncSuiteTearDownTest.suiteTearDown")
+    log.info("SyncSuiteTearDownTest.suiteTearDown")
     test.isFalse @isValid
     @changeIsValidValue()
 
@@ -81,7 +81,7 @@ class SyncSuiteTearDownTest
 try
   Munit.run(new SyncSuiteTearDownTest())
 catch err
-  console.error(err.stack)
+  log.error(err.stack)
 
 
 class AsyncSuiteTearDownTest
@@ -89,7 +89,7 @@ class AsyncSuiteTearDownTest
   isValid:true
 
   suiteSetup:(test,onComplete)=>
-    console.log("AsyncSuiteTearDownTest.suiteSetup")
+    log.info("AsyncSuiteTearDownTest.suiteSetup")
     @changeIsValidValue onComplete =>
       test.isFalse @isValid
 
@@ -107,7 +107,7 @@ class AsyncSuiteTearDownTest
     )
 
   suiteTearDown:(test,onComplete)=>
-    console.log("AsyncSuiteTearDownTest.suiteTearDown")
+    log.info("AsyncSuiteTearDownTest.suiteTearDown")
     @changeIsValidValue onComplete =>
       test.isTrue @isValid
 
@@ -115,7 +115,7 @@ class AsyncSuiteTearDownTest
 try
   Munit.run(new AsyncSuiteTearDownTest())
 catch err
-  console.error(err.stack)
+  log.error(err.stack)
 
 
 class MultipleTestSyncSuiteTest
@@ -127,17 +127,17 @@ class MultipleTestSyncSuiteTest
     self = @
 
   suiteSetup:(test)->
-    console.log("MultipleTestSyncSuiteTest.suiteSetup")
+    log.info("MultipleTestSyncSuiteTest.suiteSetup")
     test.isTrue self.isValid
     self.changeIsValidValue()
 
   testOne: (test)->
-    console.log("MultipleTestSyncSuiteTest.testOne")
+    log.info("MultipleTestSyncSuiteTest.testOne")
     test.isFalse self.isValid
     self.changeIsValidValue()
 
   testTwo: (test)->
-    console.log("MultipleTestSyncSuiteTest.testTwo")
+    log.info("MultipleTestSyncSuiteTest.testTwo")
     test.isTrue self.isValid
     self.changeIsValidValue()
 
@@ -148,7 +148,7 @@ class MultipleTestSyncSuiteTest
       self.isValid = true
 
   suiteTearDown:(test)->
-    console.log("MultipleTestSyncSuiteTest.suiteTearDown")
+    log.info("MultipleTestSyncSuiteTest.suiteTearDown")
     test.isFalse(self.isValid)
     self.changeIsValidValue()
 
@@ -156,7 +156,7 @@ class MultipleTestSyncSuiteTest
 try
   Munit.run(new MultipleTestSyncSuiteTest())
 catch err
-  console.error(err.stack)
+  log.error(err.stack)
 
 
 
@@ -173,19 +173,19 @@ class MultipleTestAsyncSuiteTest
 
   changeTestValue: (value)->
     @value = value
-    console.log("value=",value)
+    log.info("value=",value)
 
   constructor:->
     self = @
 
   suiteSetup:(test)->
-    console.log("MultipleTestSyncSuiteTest.suiteSetup")
+    log.info("MultipleTestSyncSuiteTest.suiteSetup")
     self.changeTestValue("suiteSetup")
     test.equal self.value,"suiteSetup"
 
 
   testOne: (test,onComplete)->
-    console.log("MultipleTestAsyncSuiteTest.testOne")
+    log.info("MultipleTestAsyncSuiteTest.testOne")
     test.equal self.value,"suiteSetup"
     withLatency 100, onComplete ->
       test.equal self.value,"suiteSetup"
@@ -193,14 +193,14 @@ class MultipleTestAsyncSuiteTest
 
 
   testTwo: (test,onComplete)->
-    console.log("MultipleTestAsyncSuiteTest.testTwo")
+    log.info("MultipleTestAsyncSuiteTest.testTwo")
     test.equal self.value,"testOne"
 
 
 try
   Munit.run(new MultipleTestAsyncSuiteTest())
 catch err
-  console.error(err.stack)
+  log.error(err.stack)
 
 
 
@@ -230,7 +230,7 @@ class ClientServerSyncSuiteTest
 try
   Munit.run(new ClientServerSyncSuiteTest())
 catch err
-  console.error(err.stack)
+  log.error(err.stack)
 
 
 class ClientServerAsyncSuiteTest
@@ -264,7 +264,7 @@ class ClientServerAsyncSuiteTest
 try
   Munit.run(new ClientServerAsyncSuiteTest())
 catch err
-  console.error(err.stack)
+  log.error(err.stack)
 
 class CompleteSuiteTest
 
@@ -276,11 +276,11 @@ class CompleteSuiteTest
     self = @
 
   suiteSetup:(test)->
-    console.log "suiteSetup: "+count++
+    log.info "suiteSetup: "+count++
     self.isValid = true
 
   suiteTearDown:(test)->
-    console.log "suiteTearDown: "+count++
+    log.info "suiteTearDown: "+count++
     self.isValid = false
 
 #  setup:(test)->
@@ -291,7 +291,7 @@ class CompleteSuiteTest
     {
       name:"tests - Sync CompleteSuiteTest"
       func:(test)->
-        console.log "tests - Sync CompleteSuiteTest: "+count++
+        log.info "tests - Sync CompleteSuiteTest: "+count++
         test.isTrue self.isValid
         self.isValid = false
     },
@@ -299,7 +299,7 @@ class CompleteSuiteTest
       name:"tests - Async CompleteSuiteTestTwo"
       func:(test,onComplete)->
         withLatency 200,onComplete ->
-          console.log "tests - Async CompleteSuiteTest: "+count++
+          log.info "tests - Async CompleteSuiteTest: "+count++
           test.isFalse self.isValid
           if Meteor.isServer
             self.isValid = true
@@ -311,7 +311,7 @@ class CompleteSuiteTest
       name:"tests - Client CompleteSuiteTest"
       type:"client"
       func:(test)->
-        console.log "tests - Client CompleteSuiteTest: "+count++
+        log.info "tests - Client CompleteSuiteTest: "+count++
         test.isFalse self.isValid
         self.isValid = true
     },
@@ -319,19 +319,19 @@ class CompleteSuiteTest
       name:"tests - Server CompleteSuiteTest"
       type:"server"
       func:(test)->
-        console.log "tests - Server CompleteSuiteTest: "+count++
+        log.info "tests - Server CompleteSuiteTest: "+count++
         test.isTrue self.isValid
     }
 
   ]
 
   testValidIsTrue:(test)->
-    console.log "testValidIsTrue: "+count++
+    log.info "testValidIsTrue: "+count++
     test.isTrue self.isValid
     self.isValid = false
 
   testValidIsFalse:(test)->
-    console.log "testValidIsFalse: "+count++
+    log.info "testValidIsFalse: "+count++
     test.isFalse self.isValid
     if Meteor.isServer
       self.isValid = false
@@ -340,18 +340,18 @@ class CompleteSuiteTest
 
 
   clientTestValidIsTrueOnlyClient:(test)->
-    console.log "clientValidIsTrueOnlyClient: "+count++
+    log.info "clientValidIsTrueOnlyClient: "+count++
     test.isTrue self.isValid
 
   serverTestValidIsFalseOnlyServer:(test)->
-    console.log "clientValidIsFalseOnlyServer: "+count++
+    log.info "clientValidIsFalseOnlyServer: "+count++
     test.isFalse self.isValid
 
 
 try
   Munit.run(new CompleteSuiteTest())
 catch err
-  console.error(err.stack)
+  log.error(err.stack)
 
 
 class SkipSuiteTest
@@ -383,7 +383,7 @@ class SkipSuiteTest
 try
   Munit.run(new SkipSuiteTest())
 catch err
-  console.error(err.stack)
+  log.error(err.stack)
 
 
 
@@ -406,6 +406,6 @@ class TestsAsObjectSuiteTest
 try
   Munit.run(new TestsAsObjectSuiteTest())
 catch err
-  console.error(err.stack)
+  log.error(err.stack)
 
 

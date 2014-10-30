@@ -39,7 +39,7 @@ describeSuiteTest =
 try
   Munit.run(describeSuiteTest)
 catch err
-  console.error(err.stack)
+  log.error(err.stack)
 
 
 
@@ -83,10 +83,10 @@ describe 'Running tests from within nested describe blocks', ->
 
   beforeEach ->
     ranBefore = true
-    console.log "[BEFORE EACH] #{@test.test_case.name}"
+    log.info "[BEFORE EACH] #{@test.test_case.name}"
 
   afterEach ->
-    console.log "[AFTER EACH] #{@test.test_case.name}"
+    log.info "[AFTER EACH] #{@test.test_case.name}"
 
   it 'runs the first-level tests correctly', ->
 
@@ -138,11 +138,62 @@ describe 'Asynchronous tests within an "it" block', ->
   it 'is not asynchronous', ->
     expect(@isAsync).to.equal false
 
-  it 'is asynchronous', (waitFor) ->
+  it 'is asynchronous', (test, waitFor) ->
+    expect(@isAsync).to.equal true
     onTimeout = ->
-      expect(true).to.be.true
+      try
+        expect(true).to.be.true
+      catch err
+        test.exception(err)
     Meteor.setTimeout waitFor(onTimeout), 50
 
+
+describe 'Asynchronous beforeAll, beforeEach, afterEach and afterAll', ->
+
+  beforeAll (test, waitFor) ->
+    expect(@isAsync).to.equal true
+    onTimeout = ->
+      try
+        expect(true).to.be.true
+      catch err
+        test.exception(err)
+    Meteor.setTimeout waitFor(onTimeout), 50
+
+  beforeEach (test, waitFor) ->
+    expect(@isAsync).to.equal true
+    onTimeout = ->
+      try
+        expect(true).to.be.true
+      catch err
+        test.exception(err)
+    Meteor.setTimeout waitFor(onTimeout), 50
+
+  it 'is asynchronous too', (test, waitFor) ->
+    expect(@isAsync).to.equal true
+    onTimeout = ->
+      try
+        expect(true).to.be.true
+      catch err
+        test.exception(err)
+    Meteor.setTimeout waitFor(onTimeout), 50
+
+  afterEach (test, waitFor) ->
+    expect(@isAsync).to.equal true
+    onTimeout = ->
+      try
+        expect(true).to.be.true
+      catch err
+        test.exception(err)
+    Meteor.setTimeout waitFor(onTimeout), 50
+
+  afterAll (test, waitFor) ->
+    expect(@isAsync).to.equal true
+    onTimeout = ->
+      try
+        expect(true).to.be.true
+      catch err
+        test.exception(err)
+    Meteor.setTimeout waitFor(onTimeout), 50
 
 
 # --------------------------------------------------------------------------
@@ -214,5 +265,3 @@ describe.client.skip 'Skipping "describe.client"', ->
 describe.server.skip 'Skipping "describe.server"', ->
   it 'should fail', ->
     throw new Error('This should not run')
-
-
