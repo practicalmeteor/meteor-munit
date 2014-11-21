@@ -1,3 +1,7 @@
+## 2.1.2
+
+* Rename package from spacejamio:munit to practicalmeteor:munit.
+
 ## 2.1.1
 
 * Fix documentation and update changelog.
@@ -12,12 +16,12 @@
 
 ## 2.0.1
 
-* Fix spacejamio:chai settings bug.
+* Fix practicalmeteor:chai settings bug.
 
 ## 2.0.0
 
 * Update README to fix documentation bug regarding async tests, where usage description was incorrect.
-* Update spacejamio:chai and spacejamio:sinon dependencies to latest versions.
+* Update practicalmeteor:chai and practicalmeteor:sinon dependencies to latest versions.
 * Update required meteor version to 0.9.3
 * Update README to include only JavaScript examples and add tests for all the examples in the README.
 

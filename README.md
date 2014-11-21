@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/spacejamio/meteor-munit.svg?branch=master)](https://travis-ci.org/spacejamio/meteor-munit)
+[![Build Status](https://travis-ci.org/practicalmeteor/meteor-munit.svg?branch=master)](https://travis-ci.org/practicalmeteor/meteor-munit)
 
 ## Munit
 
@@ -9,9 +9,9 @@ For additional information regarding Tinytest, please refer to this excellent sc
 
 ## Installation
 
-``meteor add spacejamio:munit``
+``meteor add practicalmeteor:munit``
 
-[spacejamio:chai](https://atmospherejs.com/spacejamio/chai) and [spacejamio:sinon](https://atmospherejs.com/spacejamio/sinon) will be automatically added as well, which you can use in your tests.
+[practicalmeteor:chai](https://atmospherejs.com/practicalmeteor/chai) and [practicalmeteor:sinon](https://atmospherejs.com/practicalmeteor/sinon) will be automatically added as well, which you can use in your tests.
 
 ## BDD Interface
 
@@ -68,7 +68,7 @@ The `test` argument is the same test object passed to a test function by `Tinyte
 
 The `msg` property is a custom error message for the assertion.
 
-You can use either the test object for your assertions or the included spacejamio:chai library.
+You can use either the test object for your assertions or the included practicalmeteor:chai library.
 
 You can see the source code [here](https://github.com/meteor/meteor/blob/devel/packages/tinytest/tinytest.js).
 
@@ -365,8 +365,8 @@ Contributions are more than welcome. Here are some of our contributors:
 
 ## Changelog
 
-[CHANGELOG](https://github.com/spacejamio/meteor-munit/blob/master/CHANGELOG.md)
+[CHANGELOG](https://github.com/practicalmeteor/meteor-munit/blob/master/CHANGELOG.md)
 
 ## License
 
-[MIT](https://github.com/spacejamio/meteor-munit/blob/master/LICENSE.txt)
+[MIT](https://github.com/practicalmeteor/meteor-munit/blob/master/LICENSE.txt)

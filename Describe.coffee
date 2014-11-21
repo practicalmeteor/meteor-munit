@@ -20,13 +20,6 @@ Declares a suite of tests.  For example:
           type:   Optional. Execution domain: 'client', 'server'
 ###
 describe = (text, func, options = {}) ->
-#  if not displayedAsyncTestsMessage
-#    log.warn """
-#  spacejamio:munit: The interface for async tests in describe has changed in v2.1.0.\n
-#  Please visit https://github.com/spacejamio/meteor-munit for more info.
-#    """
-#    displayedAsyncTestsMessage = true
-
   # Setup initial conditions.
   return unless _.isFunction(func)
 
@@ -202,12 +195,12 @@ afterAll = (func) -> _suite?.suiteTearDown = wrap(func) if _.isFunction(func)
 # PRIVATE --------------------------------------------------------------------------
 
 badParamsErrorMsg = """
-spacejamio:munit: Error: The interface for async tests has changed.\n
+Error: The interface for async tests has changed.\n
 Please use '(test, waitFor)' as function arguments,\n
 use waitFor as your callback function wrapper,
 enclose all your callback function code in try catch blocks and report exceptions with test.exception.\n
-For additional information, please visit the spacejamio:munit documentation at:\n
-https://github.com/spacejamio/meteor-munit
+For additional information, please visit the practicalmeteor:munit documentation at:\n
+https://github.com/practicalmeteor/meteor-munit
 """
 
 wrap = (func) ->

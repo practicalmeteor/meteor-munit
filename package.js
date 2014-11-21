@@ -1,8 +1,8 @@
 Package.describe({
     summary: "Meteor unit testing framework for packages",
-    name: "spacejamio:munit",
-    version: "2.1.1",
-    git: "https://github.com/spacejamio/meteor-munit.git"
+    name: "practicalmeteor:munit",
+    version: "2.1.2",
+    git: "https://github.com/practicalmeteor/meteor-munit.git"
 });
 
 Package.onUse(function (api) {
@@ -12,14 +12,15 @@ Package.onUse(function (api) {
   api.use(["tinytest","test-helpers"]);
 
   api.use([
-    'spacejamio:loglevel@1.1.0_1',
-    "spacejamio:chai@1.9.2_2",
-    "spacejamio:sinon@1.10.3_1"]);
+    'practicalmeteor:loglevel@1.1.0_2',
+    "practicalmeteor:chai@1.9.2_3",
+    "practicalmeteor:sinon@1.10.3_2"]);
 
   api.imply(["tinytest","test-helpers"]);
 
-  api.imply(["spacejamio:chai@1.9.2_2", "spacejamio:sinon@1.10.3_1"]);
+  api.imply(["practicalmeteor:chai@1.9.2_3", "practicalmeteor:sinon@1.10.3_2"]);
 
+  api.addFiles("log.js");
   api.addFiles("namespaces.js");
   api.addFiles("async_multi.js");
   api.addFiles("Munit.coffee");
@@ -32,7 +33,7 @@ Package.onUse(function (api) {
 });
 
 Package.onTest(function(api) {
-    api.use(["coffeescript", "spacejamio:loglevel@1.1.0_1", "spacejamio:munit"]);
+    api.use(["coffeescript", "practicalmeteor:loglevel@1.1.0_2", "practicalmeteor:munit@2.1.2"]);
 
     api.addFiles("tests/TDDTest.js");
     api.addFiles("tests/DescribeTest.js");
