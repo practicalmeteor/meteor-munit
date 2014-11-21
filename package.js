@@ -1,6 +1,6 @@
 Package.describe({
-    summary: "Meteor unit testing framework for packages",
-    name: "practicalmeteor:munit",
+    summary: "This package has been renamed to practicalmeteor:munit. Please use the new name instead.",
+    name: "spacejamio:munit",
     version: "2.1.2",
     git: "https://github.com/practicalmeteor/meteor-munit.git"
 });
