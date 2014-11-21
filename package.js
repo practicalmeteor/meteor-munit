@@ -35,6 +35,7 @@ Package.onUse(function (api) {
 Package.onTest(function(api) {
     api.use(["coffeescript", "practicalmeteor:loglevel@1.1.0_2", "practicalmeteor:munit@2.1.2"]);
 
+    api.addFiles("tests/log.js");
     api.addFiles("tests/TDDTest.js");
     api.addFiles("tests/DescribeTest.js");
     api.addFiles("tests/TestRunnerTest.coffee");
