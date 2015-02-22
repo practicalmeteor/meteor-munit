@@ -115,7 +115,7 @@ lvTestAsyncMulti = function (name,timeout,funcs) {
   // Backward compatibility
   if( Array.isArray(timeout) ){
     funcs = timeout;
-    timeout = 5000; // 5 seconds
+    timeout = 30000; // 5 seconds
   }
 
   Tinytest.addAsync(name, function (test, onComplete) {
