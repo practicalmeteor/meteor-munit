@@ -1,5 +1,16 @@
 class Munit
 
+  @lastError: null
+
+  @wrap: (func)->
+    chai.expect(func).to.be.a('function')
+    return ->
+      Munit.lastError = null
+      try
+        func()
+      catch ex
+        Munit.lastError = ex
+        throw ex
 
   @run:(testSuite)->
     chai.expect(testSuite).to.be.an('object')
@@ -79,7 +90,7 @@ class Munit
         chai.expect(test).to.have.property('name')
         chai.expect(test).to.have.property('func')
         if not test.skip
-          test.timeout = test.timeout || 5000
+          test.timeout = test.timeout || 30000
           if test.type is "client"
             if Meteor.isClient
               arrTests.push test
