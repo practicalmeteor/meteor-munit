@@ -12,13 +12,17 @@ Package.onUse(function (api) {
   api.use(["tinytest","test-helpers"]);
 
   api.use([
-    'practicalmeteor:loglevel@1.1.0_2',
+    'practicalmeteor:loglevel@1.2.0_1',
     "practicalmeteor:chai@1.9.2_3",
     "practicalmeteor:sinon@1.10.3_2"]);
 
   api.imply(["tinytest","test-helpers"]);
 
-  api.imply(["practicalmeteor:chai@1.9.2_3", "practicalmeteor:sinon@1.10.3_2"]);
+  api.imply([
+      'practicalmeteor:loglevel@1.2.0_1',
+      "practicalmeteor:chai@1.9.2_3",
+      "practicalmeteor:sinon@1.10.3_2"
+  ]);
 
   api.addFiles("log.js");
   api.addFiles("namespaces.js");
@@ -33,7 +37,7 @@ Package.onUse(function (api) {
 });
 
 Package.onTest(function(api) {
-    api.use(["coffeescript", "practicalmeteor:loglevel@1.1.0_2", "practicalmeteor:munit@2.1.2"]);
+    api.use(["coffeescript", "practicalmeteor:loglevel@1.2.0_1", "practicalmeteor:munit@2.1.2"]);
 
     api.addFiles("tests/log.js");
     api.addFiles("tests/TDDTest.js");
