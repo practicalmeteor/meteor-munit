@@ -1,3 +1,7 @@
+## 2.1.4
+
+* Fix munit self-test dependency in package.js (nothing important)
+
 ## 2.1.3
 
 * Update practicalmeteor:loglevel dependency to 1.2.0_1
