@@ -1,3 +1,9 @@
+## 2.1.3
+
+* Update practicalmeteor:loglevel dependency to 1.2.0_1
+* api.imply practicalmeteor:loglevel
+* Change default timeouts from 5 seconds to 30 seconds
+
 ## 2.1.2
 
 * Rename package from spacejamio:munit to practicalmeteor:munit.

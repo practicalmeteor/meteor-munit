@@ -1,7 +1,7 @@
 Package.describe({
     summary: "Meteor unit testing framework for packages",
     name: "practicalmeteor:munit",
-    version: "2.1.2",
+    version: "2.1.3",
     git: "https://github.com/practicalmeteor/meteor-munit.git"
 });
 
