@@ -2,8 +2,7 @@ Package.describe({
     summary: "Meteor unit testing framework for packages",
     name: "practicalmeteor:munit",
     version: "2.1.5",
-    git: "https://github.com/practicalmeteor/meteor-munit.git",
-    debugOnly: true
+    git: "https://github.com/practicalmeteor/meteor-munit.git"
 });
 
 Package.onUse(function (api) {
@@ -38,7 +37,7 @@ Package.onUse(function (api) {
 });
 
 Package.onTest(function(api) {
-    api.use(["coffeescript", "practicalmeteor:loglevel@1.2.0_1", "practicalmeteor:munit@2.1.5"]);
+    api.use(["coffeescript", "practicalmeteor:munit@2.1.5"]);
 
     api.addFiles("tests/log.js");
     api.addFiles("tests/TDDTest.js");
