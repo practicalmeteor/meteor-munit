@@ -2,7 +2,8 @@ Package.describe({
     summary: "Meteor unit testing framework for packages",
     name: "practicalmeteor:munit",
     version: "2.1.5",
-    git: "https://github.com/practicalmeteor/meteor-munit.git"
+    git: "https://github.com/practicalmeteor/meteor-munit.git",
+    debugOnly: true
 });
 
 Package.onUse(function (api) {
