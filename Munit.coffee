@@ -90,7 +90,7 @@ class Munit
         chai.expect(test).to.have.property('name')
         chai.expect(test).to.have.property('func')
         if not test.skip
-          test.timeout = test.timeout || 30000
+          test.timeout = test.timeout || 50000
           if test.type is "client"
             if Meteor.isClient
               arrTests.push test
@@ -103,18 +103,18 @@ class Munit
     for key,func of testSuite
       if key isnt "tests" and key.indexOf("test") is 0
         expect(func).to.be.a('function')
-        arrTests.push name:key,func:func,timeout:5000
+        arrTests.push name:key,func:func,timeout:50000
 
       else if key.indexOf("clientTest") is 0
         if Meteor.isClient
           expect(func).to.be.a('function')
           suiteTestName = key.replace("client","")
-          arrTests.push name:suiteTestName,func:func,timeout:5000
+          arrTests.push name:suiteTestName,func:func,timeout:50000
 
       else if key.indexOf("serverTest") is 0
         if Meteor.isServer
           expect(func).to.be.a('function')
           suiteTestName = key.replace("server","")
-          arrTests.push name:suiteTestName,func:func,timeout:5000
+          arrTests.push name:suiteTestName,func:func,timeout:50000
 
     return arrTests
